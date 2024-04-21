@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { useState } from 'react'
-import "./Register.css"
+import { useEffect, useState } from 'react'
+import "./Home.css"
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button'
 
@@ -8,22 +8,30 @@ import Button from '@mui/material/Button'
 export default function Home () {
     const [events, setEvents] = useState([])
     
-    axios.get('/api/')
-        .then(function (response) {
-            console.log(response);
-            response.data.forEach(element => {
-                console.log(element)
-                const next_events = events.push(element);
-                setEvents(events, next_events)
-            });
-            console.log(events);
-        })
-        .catch(function (error) {
+    const getData =async ()=> {
+        try {
+            const {data} = await axios.get('/api/');
+            setEvents(data)
+        } catch (error) {
             console.log(error);
-        })
+        }
+    }
 
-        
-    return (<></>)
+    useEffect(() => {
+        getData()
+      }, []);
+    
+    const myList = events.map((item) => <div className="event">
+        <h2>{item.name}</h2>
+        {item.more_info !== null &&
+            <p>{item.more_info}</p>
+        }
+            <p>Začiatok: {item.start.substring(0,10)} </p>
+            <p>Koniec: {item.end.substring(0, 10)}</p>
+        </div>)
+    return (<>
+        <div>
+            {myList}
+        </div>
+    </>)
 }
-
-
