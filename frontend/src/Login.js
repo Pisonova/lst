@@ -1,33 +1,32 @@
 
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
-
+import "./Register.css"
+import {TextField, CardMedia, Button} from '@mui/material';
+import logo from './images/bluelogo.svg'
 
 export default function Login () {
-    const [name, setName] = useState('')
-    const [password, setPassword] = useState('')
-
-    const handleSubmit = () => {
-        
-    }
 
     return (
-        <div className="text-center m-5-auto">
-            <h2>Sign in to us</h2>
-            <p>
-                <label>Username or email address</label><br/>
-                <input type="text" onChange={(e) => {
-                    setName(e.target.value)}
-                 } />
-            </p>
-            <p>
-                <label>Password</label>
-                <br/>
-                <input type="password" required onChange={(e) => setPassword(e.target.value)}/>
-            </p>
-            <p>
-                <button onClick={handleSubmit} disabled={!(name.length > 0 && password.length > 5)}>Login</button>
-            </p>
+        <>
+        <div className="container">
+            <form>
+                <h2>Prihlásenie</h2>
+                <div className="ui divider"></div>
+                <div className="field">
+                    <TextField
+                        label='Používateľské meno'
+                    />
+                </div>
+                <div className="field">
+                    <TextField
+                        label='Heslo'
+                        type='password'
+                    />
+                </div>
+                <Button variant="contained">Submit</Button>
+            </form>
         </div>
+        </>
     )
 }
