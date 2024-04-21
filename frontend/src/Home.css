@@ -6,7 +6,6 @@ h2 {
     color: rgb(21, 124, 221);
 }
 .event {
-
     display: flex !important;
     flex-direction: column;
     justify-content: center;
@@ -15,7 +14,7 @@ h2 {
     border: 1px solid #157ee0;
     height: 25vh;
     max-width: 35%;
-    margin: auto;
+    margin-left: 30%;
     margin-top: 3%; 
 }
 
@@ -39,15 +38,6 @@ pre {
     font-size: larger;
 }
 
-button {
-    background: #157ee0 !important;
-    padding: 3%;
-    border-radius: 10px;
-    width: 100%;
-    color: white;
-    margin-top: 5%;
-}
-
 p {
     color: black;
     margin: 1%;
@@ -58,13 +48,25 @@ p {
     padding: 5px;
 }
 
-span{
-    color: rgb(0, 95, 236);
-    cursor: pointer;
-}
-
 .field{
     padding-bottom: 5%;
     margin: auto;
     padding: auto;
+}
+
+
+.btn {
+    float: right;
+    margin: auto;
+    margin-right: 3%;
+}
+
+.log {
+    float: right;
+    color: #157ee0;
+    width: auto;
+}
+
+.log > p {
+    color: #157ee0;
 }
