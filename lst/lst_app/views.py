@@ -41,8 +41,8 @@ def register(req):
             first_name=first_name,
             last_name=surname,
             email=email,
-            password=password,
         )
+        new_user.set_password(password)
     except:
         return JsonResponse({"message": "Nepodarilo sa vytvoriť účet"})
     
