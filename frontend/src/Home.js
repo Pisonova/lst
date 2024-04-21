@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import "./Home.css"
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button'
-
+import { hostname } from './config';
 
 export default function Home () {
     const [events, setEvents] = useState([])
@@ -16,7 +16,7 @@ export default function Home () {
     
     const getData =async ()=> {
         try {
-            const {data} = await axios.get('/api/');
+            const {data} = await axios.get(`http://${hostname}:8000/api/`);
             setEvents(data)
         } catch (error) {
             console.log(error);

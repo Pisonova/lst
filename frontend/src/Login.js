@@ -3,13 +3,14 @@ import { useState } from 'react'
 import "./Register.css"
 import {TextField, CardMedia, Button} from '@mui/material';
 import axios from 'axios'
+import {hostname} from './config';
 
 export default function Login () {
     const [name, setName] = useState('')
     const [passwd, setPasswd] = useState('')
 
     const handleSubmit = () => {
-        axios.post('/api/login', {
+        axios.post(`http://${hostname}:8000/api/login`, {
             username: name,
             password: passwd
         }).then(function ({data}) {

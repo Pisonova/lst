@@ -3,6 +3,7 @@ import { useState } from 'react'
 import "./Register.css"
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button'
+import { hostname } from './config';
 
 
 export default function Register () {
@@ -23,7 +24,7 @@ export default function Register () {
                 if (passwd.length < 6) {
                     alert("Heslo musí mať aspoň 6 znakov")
                 } else {
-                    axios.post('/api/register', {
+                    axios.post(`http://${hostname}/api/register`, {
                         first_name: first_name,
                         surname: surname,
                         email: email,
