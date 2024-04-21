@@ -4,7 +4,7 @@ import json
 from django.contrib.auth.models import User
 import jwt
 from django.conf import settings
-from .models import CustomUser
+from .models import *
 
 
 @csrf_exempt
@@ -54,3 +54,9 @@ def register(req):
     token = jwt.encode({"name": username}, key=settings.SECRET_KEY, algorithm="HS256")
     return JsonResponse({"token": token})
 
+@csrf_exempt
+def load(req):
+    events = Event.objects.all()
+    for e in events:
+        print(events)
+    return JsonResponse(list(events.values()), safe=False)
