@@ -1,12 +1,9 @@
 import './App.css';
 import Login from './Login'
 import Register from './Register'
-import ReactDOM from "react-dom/client";
+import Home from './Home'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-const Home = () => (
-  <div></div>
-)
 
 function App() {
     return (
