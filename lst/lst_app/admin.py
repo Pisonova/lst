@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import User, Event, Program_registration, Event_registration, Program, Program_type, Role, Role_type, Feedback, Accomodation_date, Attendance
+from .models import CustomUser, Event, Program_registration, Event_registration, Program, Program_type, Role, Role_type, Feedback, Accomodation_date, Attendance
 
 class PRAdmin(admin.ModelAdmin):
     list_display = ('user', 'program')
@@ -26,10 +26,10 @@ class ProgramAdmin(admin.ModelAdmin):
 class RoleAdmin(admin.ModelAdmin):
     list_display = ('role_type', 'event') 
 
-class UserAdmin(admin.ModelAdmin):
+class CustomUserAdmin(admin.ModelAdmin):
     list_display = ('user_name', 'first_name', 'surname', 'email')   
 
-admin.site.register(User, UserAdmin)
+admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(Program_registration, PRAdmin)
 admin.site.register(Event_registration, ERAdmin)
