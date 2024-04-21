@@ -23,6 +23,8 @@ services:
   frontend:
     build:
       context: ./frontend
+    ports:
+      - "8001:80"
 
 volumes:
   data:
