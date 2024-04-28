@@ -18,7 +18,9 @@ export default function Login () {
             localStorage.setItem("token", data.token)
             window.location.replace(window.location.origin) 
         }).catch(function (error) {
-            alert(error);
+            if (error.response?.data?.message !== null) {
+                alert(error.response.data.message)
+            } else {alert(error)};
         });
     }
 
