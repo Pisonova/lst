@@ -56,7 +56,5 @@ def register(req):
 
 @csrf_exempt
 def load(req):
-    events = Event.objects.all()
-    for e in events:
-        print(events)
+    events = Event.objects.filter(visible=True)
     return JsonResponse(list(events.values()), safe=False)
