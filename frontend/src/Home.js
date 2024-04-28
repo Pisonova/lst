@@ -47,10 +47,11 @@ export default function Home () {
     }
     return (<>
         <div>
-            <div class="btn">
+            <div className="btn">
                 <Button href={adr} onClick={HandleLogIn}>{txt}</Button>
+                {(localStorage["token"] == null) ? (<Button href='/registration'> Zaregistrovať sa</Button>) : (<div></div>)}
             </div>
-            <div class='log'>
+            <div className='log'>
                 <p>{welcome}</p>
             </div>
             {myList}
