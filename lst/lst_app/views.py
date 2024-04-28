@@ -6,6 +6,9 @@ import jwt
 from django.conf import settings
 from .models import *
 
+def check_login(token):
+    username = jwt.decode(token, key=settings.SECRET_KEY, algorithms="HS256")
+    return username
 
 @csrf_exempt
 def login(req):
@@ -44,7 +47,7 @@ def register(req):
         )
         new_user.set_password(password)
     except:
-        return JsonResponse({"message": "Nepodarilo sa vytvoriť účet"})
+        return JsonResponse({"message": "Nepodarilo sa vytvoriť účet"}, status=401)
     
     new_user.save()
 
@@ -58,3 +61,36 @@ def register(req):
 def load(req):
     events = Event.objects.filter(visible=True)
     return JsonResponse(list(events.values()), safe=False)
+
+@csrf_exempt
+def get_event(req, id):
+    event = Event.objects.filter(id=id)
+    return JsonResponse(list(event.values()), safe=False)
+
+@csrf_exempt
+def register_event(req):
+    body = json.loads(req.body)
+    token, event_id = body["token"], body["event_id"]
+    lunches, accomodation = body["lunches"], body["accomodation"]
+
+    username = check_login(token)
+    user = User.objects.get(username=username["name"])
+    customUser = CustomUser.objects.get(user=user)
+    event = Event.objects.get(id=event_id)
+    try:
+        Event_registration.objects.get(user=customUser, event=event)
+        return JsonResponse({"message": "Na túto akciu už ste zaregistrovaný"}, status=401)
+    except:
+        pass
+    try:
+        ereg = Event_registration.objects.create(
+            user=customUser,
+            event=event,
+            lunches=int(lunches),
+        )
+    except Exception as error:
+        return JsonResponse({"message": "Nepodarilo sa zaregistrovať na akciu"}, status=401)
+
+    ereg.save()
+
+    return JsonResponse({})
