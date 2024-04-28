@@ -68,3 +68,9 @@ span{
     margin: auto;
     padding: auto;
 }
+
+.change {
+    text-align: center;
+    margin-top: 10px;
+    padding-top: 5%;
+}

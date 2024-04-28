@@ -94,6 +94,9 @@ export default function Register () {
                     </div>
                     <Button variant="contained" onClick={handleSubmit}>Submit</Button>
                 </div>
+                <div className='change'>
+                <a href="/login">Máte už vytvorený účet? Prihláste sa</a>
+                </div>
             </form>
         </div>
         </>

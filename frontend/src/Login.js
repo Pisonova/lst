@@ -47,6 +47,9 @@ export default function Login () {
                     />
                 </div>
                 <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+                <div className='change'>
+                <a href="/registration">Nemáte ešte vytvorený účet? Registrujte sa</a>
+                </div>
             </form>
         </div>
         </>
