@@ -27,6 +27,10 @@ export default function Home () {
         getData()
       }, []);
     
+    let loggedin = false;
+    if (localStorage["token"] != null) {
+        loggedin = true;
+    }
     const myList = events.map((item) => <div className="event">
         <h2>{item.name}</h2>
         {item.more_info !== null &&
@@ -34,6 +38,11 @@ export default function Home () {
         }
             <p>Začiatok: {item.start.substring(0,10)} </p>
             <p>Koniec: {item.end.substring(0, 10)}</p>
+            <Button 
+                disabled={!loggedin} 
+                href={`/event_registration/${item.id}`} 
+            >Zaregistrovať sa</Button>
+            {!loggedin && <a href="/login" className='info'>Najskôr sa musíte prihlásiť</a>}
         </div>)
     let txt = "Odhlásiť sa";
     let adr = "/"

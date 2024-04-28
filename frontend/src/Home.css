@@ -70,3 +70,11 @@ p {
 .log > p {
     color: #157ee0;
 }
+
+a {
+    text-align: center;
+}
+
+.info {
+    color:red;
+}
