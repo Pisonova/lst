@@ -24,7 +24,7 @@ export default function Register () {
                 if (passwd.length < 6) {
                     alert("Heslo musí mať aspoň 6 znakov")
                 } else {
-                    axios.post(`http://${hostname}/api/register`, {
+                    axios.post(`http://${hostname}:8000/api/register`, {
                         first_name: first_name,
                         surname: surname,
                         email: email,
