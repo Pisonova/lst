@@ -21,7 +21,7 @@ class Action(models.Model):
         abstract = True
 
 class Event(Action):
-    pass
+    accomodation_dates = models.ManyToManyField(Accomodation_date, blank=True)
 
     def __str__(self):
         return self.name
@@ -86,7 +86,6 @@ class Attendance(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, blank=True, null=True)
     program = models.ForeignKey(Program, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateTimeField('day', blank=True, null=True)
-
 
 class Feedback(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
