@@ -4,7 +4,8 @@ import "./Home.css"
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button'
 import { hostname } from './config';
-
+import Menu from "./Menu.js"
+ 
 export default function Home () {
     const [events, setEvents] = useState([])
 
@@ -56,6 +57,7 @@ export default function Home () {
     }
     return (<>
         <div>
+            <Menu />
             <div className="btn">
                 <Button href={adr} onClick={HandleLogIn}>{txt}</Button>
                 {(localStorage["token"] == null) ? (<Button href='/registration'> Zaregistrovať sa</Button>) : (<div></div>)}

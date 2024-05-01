@@ -6,16 +6,15 @@ h2 {
     color: rgb(21, 124, 221);
 }
 .event {
-    display: flex !important;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     border-radius: 3%;
     border: 1px solid #157ee0;
-    height: 25vh;
-    max-width: 35%;
-    margin-left: 30%;
-    margin-top: 3%; 
+    position: relative;
+    margin-left: 25%;
+    padding: 3%;
 }
 
 .container > form {
