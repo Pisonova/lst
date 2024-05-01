@@ -4,13 +4,15 @@ import "./Home.css"
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button'
 import Radio from '@mui/material/Radio'
+import Checkbox from '@mui/material/Checkbox'
 import { FormLabel, RadioGroup, FormGroup, FormControlLabel } from '@mui/material'
 import { hostname } from './config';
 import { useParams } from 'react-router-dom'
 
+
 export default function EventRegistration (props) {
     const [lunches, setLunches] = useState(0)
-    const [accomodation, setAccomodation] = useState(true)
+    const [accomodation, setAccomodation] = useState(false)
     const [logEvent, setEvent] = useState('')
     const { eventId } = useParams();
     
@@ -44,6 +46,13 @@ export default function EventRegistration (props) {
         getEvent()
       }, []);
 
+      const myList = []
+      if (logEvent.accomodation_dates != null) {
+        myList.push(logEvent.accomodation_dates.map((item) => <div className="accomodations">
+          <FormControlLabel control={<Checkbox />} label={item.start.substring(0,10) + " - " + item.end.substring(0, 10)} />
+        </div>))
+      }
+       
     return (<>
         <div className="container">
             <FormGroup>
@@ -73,6 +82,10 @@ export default function EventRegistration (props) {
                         <FormControlLabel value={false} control={<Radio />} label='Nie' onChange={(e) => setAccomodation(e.target.value)}/>
                     </RadioGroup>
                 </div>
+                <FormGroup>
+                    <FormLabel > Ktoré obdobia? </FormLabel>
+                    {myList}
+                </FormGroup>
                 <Button variant="contained" onClick={handleSubmit}>Submit</Button>
             </FormGroup>
         </div>

@@ -65,7 +65,10 @@ def load(req):
 @csrf_exempt
 def get_event(req, id):
     event = Event.objects.filter(id=id)
-    return JsonResponse(list(event.values()), safe=False)
+    ads = event.first().accomodation_dates.all()
+    values = list(event.values())
+    values[0]["accomodation_dates"] = list(event.first().accomodation_dates.all().values())
+    return JsonResponse(values, safe=False)
 
 @csrf_exempt
 def register_event(req):
