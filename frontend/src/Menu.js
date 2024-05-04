@@ -26,7 +26,11 @@ export default function Menu () {
                     Menu
                 </ListSubheader>
             }
-            >{
+            >
+            <ListItemButton href='/'>
+            <ListItemText primary="Hlavná stránka" />
+            </ListItemButton>
+            {
               (localStorage["token"] != null) &&
               <ListItemButton href="/my_events">
               <ListItemText primary="Moje akcie" />
