@@ -12,17 +12,17 @@ import { useParams } from 'react-router-dom'
 
 export default function EventRegistration (props) {
     const [lunches, setLunches] = useState(0)
-    const [accomodation, setAccomodation] = useState(false)
     const [logEvent, setEvent] = useState('')
     const { eventId } = useParams();
+    const accomodations = []
+    const accs = []
     
     const handleSubmit = () => {
-        console.log("")
         axios.post(`http://${hostname}:8000/api/register_event`, {
             token: localStorage["token"],
             event_id: eventId,
             lunches: lunches,
-            accomodation: accomodation,
+            accomodations: accomodations[0],
         }).then(function ({data}) {
             window.location.replace(window.location.origin) 
         }).catch(function (error) {
@@ -32,13 +32,20 @@ export default function EventRegistration (props) {
         });
     }
 
+    const handleClick = (start, end) => {
+        for (let i = 0; i < accs[0].length; i++) {
+            if (start == accs[0][i][0] && end == accs[0][i][1]) {
+                accomodations[0][i] = !accomodations[0][i];
+            }
+        }
+    }
+
     const getEvent =async ()=> {
         try {
             const {data} = await axios.get(`http://${hostname}:8000/api/registration/${eventId}`);
             setEvent(data[0]);
-            console.log(logEvent)
         } catch (error) {
-            console.log(error);
+            alert(error);
         }
     }
 
@@ -48,8 +55,10 @@ export default function EventRegistration (props) {
 
       const myList = []
       if (logEvent.accomodation_dates != null) {
+        accs.push(logEvent.accomodation_dates.map((item) => [item.start.substring(0, 10), item.end.substring(0,10)]))
+        accomodations.push(logEvent.accomodation_dates.map(() => false))
         myList.push(logEvent.accomodation_dates.map((item) => <div className="accomodations">
-          <FormControlLabel control={<Checkbox />} label={item.start.substring(0,10) + " - " + item.end.substring(0, 10)} />
+          <FormControlLabel control={<Checkbox onClick={(e) => handleClick(item.start, item.end)} />} label={item.start.substring(0,10) + " - " + item.end.substring(0, 10)} />
         </div>))
       }
        
@@ -72,18 +81,8 @@ export default function EventRegistration (props) {
                         onChange={(e) => setLunches(e.target.value)}
                     />  
                 </div>
-                <div className="field">
-                    <FormLabel id='ubytovanie'>Požadujete ubytovanie?</FormLabel>
-                    <RadioGroup aria-labelledby="demo-radio-buttons-group-label"
-                        defaultValue={true}
-                        name="accomodation"
-                    >
-                        <FormControlLabel value={true} control={<Radio />} label='Áno' onChange={(e) => setAccomodation(e.target.value)}/>
-                        <FormControlLabel value={false} control={<Radio />} label='Nie' onChange={(e) => setAccomodation(e.target.value)}/>
-                    </RadioGroup>
-                </div>
                 <FormGroup>
-                    <FormLabel > Ktoré obdobia? </FormLabel>
+                    <FormLabel > Požadujete ubytovanie? </FormLabel>
                     {myList}
                 </FormGroup>
                 <Button variant="contained" onClick={handleSubmit}>Submit</Button>

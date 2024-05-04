@@ -143,23 +143,34 @@ def get_event(req, id):
 def register_event(req):
     body = json.loads(req.body)
     token, event_id = body["token"], body["event_id"]
-    lunches, accomodation = body["lunches"], body["accomodation"]
+    lunches, accomodations = body["lunches"], body["accomodations"]
 
     username = check_login(token)
     user = User.objects.get(username=username["name"])
     customUser = CustomUser.objects.get(user=user)
     event = Event.objects.get(id=event_id)
+    accs = event.accomodation_dates.all()
+
     try:
         Event_registration.objects.get(user=customUser, event=event)
         return JsonResponse({"message": "Na túto akciu už ste zaregistrovaný"}, status=401)
     except:
         pass
+
     try:
         ereg = Event_registration.objects.create(
             user=customUser,
             event=event,
             lunches=int(lunches),
         )
+        accomodation_dates = []
+        print("here")
+        for i in range(len(accomodations)):
+            if accomodations[i]:
+                ereg.accomodation_dates.add(accs[i])
+        print("her now")
+        print(accomodation_dates)
+
     except Exception as error:
         return JsonResponse({"message": "Nepodarilo sa zaregistrovať na akciu"}, status=401)
 
