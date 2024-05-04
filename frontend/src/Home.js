@@ -17,7 +17,7 @@ export default function Home () {
     
     const getData =async ()=> {
         try {
-            const {data} = await axios.get(`http://${hostname}:8000/api/`);
+            const {data} = await axios.get(`http://${hostname}:8000/api/`,  {params: {token: localStorage["token"], }});
             setEvents(data)
         } catch (error) {
             console.log(error);
@@ -32,6 +32,13 @@ export default function Home () {
     if (localStorage["token"] != null) {
         loggedin = true;
     }
+    let today = new Date();
+
+    if (events[1]) {
+        console.log(new Date(events[1]["registration_start"]) > new Date())
+    // console.log("dalo by sa", estart.getTime() < today.getTime())
+    console.log(events[1])}
+    
     const myList = events.map((item) => <div className="event">
         <h2>{item.name}</h2>
         {item.more_info !== null &&
@@ -39,11 +46,13 @@ export default function Home () {
         }
             <p>Začiatok: {item.start.substring(0,10)} </p>
             <p>Koniec: {item.end.substring(0, 10)}</p>
-            <Button 
-                disabled={!loggedin} 
+            {!item.registered && item.registration_end != null && (item.registration_start == null || new Date(item.registration_start) <= new Date()) && <Button 
+                disabled={!loggedin || item.registered} 
                 href={`/event_registration/${item.id}`} 
-            >Zaregistrovať sa</Button>
-            {!loggedin && <a href="/login" className='info'>Najskôr sa musíte prihlásiť</a>}
+            >Zaregistrovať sa (do {item.registration_end.substring(0,10)})</Button>}
+            {!loggedin && item.registration_end != null && <a href="/login" className='info'>Najskôr sa musíte prihlásiť</a>}
+            {item.registered && <div className="success">Na túto akciu ste zaregistrovaný</div>}
+            {item.registration_start != null && new Date(item.registration_start) > new Date() && <div className="info"> Registrácia od: {item.registration_start.substring(0,10)} </div>}
         </div>)
     let txt = "Odhlásiť sa";
     let adr = "/"

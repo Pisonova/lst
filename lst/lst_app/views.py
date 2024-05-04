@@ -5,10 +5,14 @@ from django.contrib.auth.models import User
 import jwt
 from django.conf import settings
 from .models import *
+from datetime import datetime, timedelta
+from django.utils import timezone
 
 def check_login(token):
-    username = jwt.decode(token, key=settings.SECRET_KEY, algorithms="HS256")
-    return username
+    if token != None:
+        username = jwt.decode(token, key=settings.SECRET_KEY, algorithms="HS256")
+        return username
+    return token
 
 @csrf_exempt
 def login(req):
