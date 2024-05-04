@@ -50,7 +50,7 @@ export default function Home () {
                 disabled={!loggedin || item.registered} 
                 href={`/event_registration/${item.id}`} 
             >Zaregistrovať sa (do {item.registration_end.substring(0,10)})</Button>}
-            {!loggedin && item.registration_end != null && <a href="/login" className='info'>Najskôr sa musíte prihlásiť</a>}
+            {!loggedin && item.registration_end != null && (item.registration_start == null || new Date(item.registration_start) < new Date()) && <a href="/login" className='info'>Najskôr sa musíte prihlásiť</a>}
             {item.registered && <div className="success">Na túto akciu ste zaregistrovaný</div>}
             {item.registration_start != null && new Date(item.registration_start) > new Date() && <div className="info"> Registrácia od: {item.registration_start.substring(0,10)} </div>}
         </div>)
