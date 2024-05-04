@@ -107,7 +107,7 @@ def load_my_events(req):
         token = req.GET["token"]
         username = check_login(token)
     except:
-        pass
+        return JsonResponse({"message": "Nie ste prihlásený"}, status=401)
     if username:
         print(username)
     events = Event.objects.filter(visible=True).filter(end__range=[datetime.now(), datetime.now()+timedelta(days=10000)])
