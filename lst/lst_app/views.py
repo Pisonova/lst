@@ -63,8 +63,73 @@ def register(req):
 
 @csrf_exempt
 def load(req):
-    events = Event.objects.filter(visible=True)
-    return JsonResponse(list(events.values()), safe=False)
+    username = None
+    try:
+        token = req.GET["token"]
+        username = check_login(token)
+    except:
+        pass
+    if username:
+        print(username)
+    events = Event.objects.filter(visible=True).filter(end__range=[datetime.now(), datetime.now()+timedelta(days=10000)])
+    registrations = []
+
+    if username:
+        user = User.objects.get(username=username["name"])
+        cUser = CustomUser.objects.get(user=user)
+        for event in events:
+            if Event_registration.objects.filter(user=cUser, event=event):
+                registrations.append(True)
+            else:
+                registrations.append(False)
+    if len(registrations) == 0:
+        registrations = [False for event in events]
+    res = list(events.values())
+    for i in range(len(res)):
+        res[i]["registered"] = registrations[i]
+    return JsonResponse(res, safe=False)
+
+@csrf_exempt
+def load_old(req):
+    events = Event.objects.filter(visible=True).filter(end__range=[datetime.now()-timedelta(days=100000), datetime.now()])
+    registrations = []
+    if len(registrations) == 0:
+        registrations = [False for event in events]
+    res = list(events.values())
+    for i in range(len(res)):
+        res[i]["registered"] = registrations[i]
+    return JsonResponse(res, safe=False)
+
+@csrf_exempt
+def load_my_events(req):
+    username = None
+    try:
+        token = req.GET["token"]
+        username = check_login(token)
+    except:
+        pass
+    if username:
+        print(username)
+    events = Event.objects.filter(visible=True).filter(end__range=[datetime.now(), datetime.now()+timedelta(days=10000)])
+    registrations = []
+
+    if username:
+        user = User.objects.get(username=username["name"])
+        cUser = CustomUser.objects.get(user=user)
+        for event in events:
+            if Event_registration.objects.filter(user=cUser, event=event):
+                registrations.append(True)
+            else:
+                registrations.append(False)
+    if len(registrations) == 0:
+        registrations = [False for event in events]
+    res = list(events.values())
+    myevents = []
+    for i in range(len(res)):
+        if registrations[i]:
+            res[i]["registered"] = registrations[i]
+            myevents.append(res[i])
+    return JsonResponse(myevents, safe=False)
 
 @csrf_exempt
 def get_event(req, id):
