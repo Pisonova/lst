@@ -32,7 +32,7 @@ export default function Menu () {
               <ListItemText primary="Moje akcie" />
               </ListItemButton>
             }
-            <ListItemButton href='/archiv'>
+            <ListItemButton href='/archive'>
               <ListItemText primary="Staršie akcie" />
             </ListItemButton>
             { (localStorage["token"] != null) && 
