@@ -32,12 +32,6 @@ export default function Home () {
     if (localStorage["token"] != null) {
         loggedin = true;
     }
-    let today = new Date();
-
-    if (events[1]) {
-        console.log(new Date(events[1]["registration_start"]) > new Date())
-    // console.log("dalo by sa", estart.getTime() < today.getTime())
-    console.log(events[1])}
     
     const myList = events.map((item) => <div className="event">
         <h2>{item.name}</h2>

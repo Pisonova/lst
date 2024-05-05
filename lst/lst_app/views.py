@@ -208,3 +208,11 @@ def get_action(req, type, id):
     if len(action) == 0:
         return JsonResponse({"message": "Na túto akciu nie je možné dať feedback"}, status=401)  
     return JsonResponse(list(action.values()), safe=False)
+
+@csrf_exempt
+def get_programs(req, id):
+    event = Event.objects.filter(id=id)
+    values = list(event.values())
+    programs = Program.objects.filter(events__id=id)
+    values[0]["programs"] = list(programs.values())
+    return JsonResponse(values, safe=False)
