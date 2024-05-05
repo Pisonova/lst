@@ -32,9 +32,9 @@ export default function Home () {
     if (localStorage["token"] != null) {
         loggedin = true;
     }
-    
+
     const myList = events.map((item) => <div className="event">
-        <h2>{item.name}</h2>
+        <Button href={`/event_info/${item.id}`} > <h2>{item.name}</h2> </Button>
         {item.more_info !== null &&
             <p>{item.more_info}</p>
         }
