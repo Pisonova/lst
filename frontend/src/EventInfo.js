@@ -22,7 +22,7 @@ export default function EventInfo(props) {
             token: localStorage["token"],
             id: id,
         }).then(function ({data}) {
-            window.location.reload() 
+            window.location.reload()
         }).catch(function (error) {
             if (error.response?.data?.message !== null) {
                 alert(error.response.data.message)
@@ -63,10 +63,12 @@ export default function EventInfo(props) {
         }
             <p>Začiatok: {item.start.substring(0,10)} </p>
             <p>Koniec: {item.end.substring(0, 10)}</p>
-            {!item.registered && item.registration_end != null && (item.registration_start == null || new Date(item.registration_start) <= new Date()) && <Button 
+            <div className="pReg">
+            {event.registered && !item.registered && item.registration_end != null && (item.registration_start == null || new Date(item.registration_start) <= new Date()) && <Button 
+                color='inherit'
                 disabled={!loggedin || item.registered} 
                 onClick={() => HandleProgramReg(item.id)} 
-            >Zaregistrovať sa (do {item.registration_end.substring(0,10)})</Button>}
+            >Zaregistrovať sa (do {item.registration_end.substring(0,10)})</Button>} </div>
             {!loggedin && item.registration_end != null && (item.registration_start == null || new Date(item.registration_start) < new Date()) && <a href="/login" className='info'>Najskôr sa musíte prihlásiť</a>}
             {item.registered && <div className="success">Na tento program ste zaregistrovaný</div>}
             {item.registration_start != null && new Date(item.registration_start) > new Date() && <div className="info"> Registrácia od: {item.registration_start.substring(0,10)} </div>}
