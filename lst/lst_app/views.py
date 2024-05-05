@@ -69,8 +69,6 @@ def load(req):
         username = check_login(token)
     except:
         pass
-    if username:
-        print(username)
     events = Event.objects.filter(visible=True).filter(end__range=[datetime.now(), datetime.now()+timedelta(days=10000)])
     registrations = []
 
@@ -108,8 +106,6 @@ def load_my_events(req):
         username = check_login(token)
     except:
         return JsonResponse({"message": "Nie ste prihlásený"}, status=401)
-    if username:
-        print(username)
     events = Event.objects.filter(visible=True).filter(end__range=[datetime.now(), datetime.now()+timedelta(days=10000)])
     registrations = []
 
@@ -164,12 +160,9 @@ def register_event(req):
             lunches=int(lunches),
         )
         accomodation_dates = []
-        print("here")
         for i in range(len(accomodations)):
             if accomodations[i]:
                 ereg.accomodation_dates.add(accs[i])
-        print("her now")
-        print(accomodation_dates)
 
     except Exception as error:
         return JsonResponse({"message": "Nepodarilo sa zaregistrovať na akciu"}, status=401)
@@ -177,3 +170,41 @@ def register_event(req):
     ereg.save()
 
     return JsonResponse({})
+
+@csrf_exempt
+def add_feedback(req):
+    body = json.loads(req.body)
+    token, aType, id = body["token"], body["type"], body["id"]
+    points, feedback = body["points"], body["feedback"]
+    try:
+        fb = Feedback.objects.create(
+            points=points
+        )
+        if aType == 'program':
+            program = Program.objects.get(id=id)
+            fb.program=program
+        else:
+            event = Event.objects.get(id=id)
+            fb.event = event
+        if feedback != "":
+            fb.comment = feedback
+        if token != "":
+            username = check_login(token)["name"]
+            user = User.objects.get(username=username)
+            cUser = CustomUser.objects.get(user=user)
+            fb.user = cUser
+    except:
+        return JsonResponse({"message": "Nepodarilo sa pridať feedback"}, status=401)
+    fb.save()
+    return JsonResponse({})
+
+@csrf_exempt
+def get_action(req, type, id):
+
+    try:
+        action = Program.objects.filter(id=id) if type == 'program' else Event.objects.filter(id=id)
+    except:
+        return JsonResponse({"message": "Na túto akciu nie je možné dať feedback"}, status=401)
+    if len(action) == 0:
+        return JsonResponse({"message": "Na túto akciu nie je možné dať feedback"}, status=401)  
+    return JsonResponse(list(action.values()), safe=False)

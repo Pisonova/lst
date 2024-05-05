@@ -54,6 +54,9 @@ export default function Home () {
             {item.registered && <div className="success">Na túto akciu ste zaregistrovaný</div>}
             {item.registration_start != null && new Date(item.registration_start) > new Date() && <div className="info"> Registrácia od: {item.registration_start.substring(0,10)} </div>}
         </div>)
+    if (myList.length == 0) {
+        myList.push(<div className="event"> <h2>V najbližšej dobe sa žiadne akcie nekonajú </h2></div>)
+    }
     let txt = "Odhlásiť sa";
     let adr = "/"
     let welcome = ""
@@ -74,7 +77,7 @@ export default function Home () {
             <div className='log'>
                 <p>{welcome}</p>
             </div>
-            {myList}
+            {myList || <div> V najbližšej dobe sa nekonajú žiadne akcie </div>}
         </div>
     </>)
 }

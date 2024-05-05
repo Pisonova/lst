@@ -44,6 +44,7 @@ export default function MyEvents () {
         }
             <p>Začiatok: {item.start.substring(0,10)} </p>
             <p>Koniec: {item.end.substring(0, 10)}</p>
+            <Button href={`/feedback/event/${item.id}`} > Feedback </Button>
         </div>)
     let txt = "Odhlásiť sa";
     let adr = "/"
