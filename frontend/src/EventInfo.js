@@ -17,9 +17,24 @@ export default function EventInfo(props) {
         }
     }
 
+    const HandleProgramReg = (id) =>{
+        axios.post(`http://${hostname}:8000/api/register_program`, {
+            token: localStorage["token"],
+            id: id,
+        }).then(function ({data}) {
+            window.location.reload() 
+        }).catch(function (error) {
+            if (error.response?.data?.message !== null) {
+                alert(error.response.data.message)
+            } else {alert(error)};
+        });
+    }
+
     const getData =async ()=> {
         try {
-            const {data} = await axios.get(`http://${hostname}:8000/api/programs/${id}`)
+            const {data} = await axios.get(`http://${hostname}:8000/api/programs/${id}`, { params:
+                {token: localStorage["token"]}
+            })
             setEvent(data[0])
         } catch (error) {
             if (error?.response?.data?.message) {
@@ -34,7 +49,12 @@ export default function EventInfo(props) {
         getData()
       }, []);
     
-      const myList = []
+    
+    const myList = []
+    let loggedin = false;
+    if (localStorage["token"] != null) {
+        loggedin = true;
+    }
     if (event?.programs != null) {
         myList.push(event.programs.map((item) => <div className="event">
         <h2>{item.name}</h2>
@@ -43,13 +63,16 @@ export default function EventInfo(props) {
         }
             <p>Začiatok: {item.start.substring(0,10)} </p>
             <p>Koniec: {item.end.substring(0, 10)}</p>
+            {!item.registered && item.registration_end != null && (item.registration_start == null || new Date(item.registration_start) <= new Date()) && <Button 
+                disabled={!loggedin || item.registered} 
+                onClick={() => HandleProgramReg(item.id)} 
+            >Zaregistrovať sa (do {item.registration_end.substring(0,10)})</Button>}
+            {!loggedin && item.registration_end != null && (item.registration_start == null || new Date(item.registration_start) < new Date()) && <a href="/login" className='info'>Najskôr sa musíte prihlásiť</a>}
+            {item.registered && <div className="success">Na tento program ste zaregistrovaný</div>}
+            {item.registration_start != null && new Date(item.registration_start) > new Date() && <div className="info"> Registrácia od: {item.registration_start.substring(0,10)} </div>}
+                
         </div>))
     } 
-    
-    let loggedin = false;
-    if (localStorage["token"] != null) {
-        loggedin = true;
-    }
     
     let txt = "Odhlásiť sa";
     let adr = "/"

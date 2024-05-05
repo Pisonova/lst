@@ -214,5 +214,57 @@ def get_programs(req, id):
     event = Event.objects.filter(id=id)
     values = list(event.values())
     programs = Program.objects.filter(events__id=id)
+    pReg = []
+    reg = False
+    try:
+        token = req.GET["token"]
+        username = check_login(token)["name"]
+        print(username)
+        user = User.objects.get(username=username)
+        cUser = CustomUser.objects.get(user=user)
+        regs = Event_registration.objects.filter(user=cUser, event=event[0])
+        if len(regs) > 0:
+            reg = True
+        for prog in programs:
+            progReg = Program_registration.objects.filter(user=cUser, program=prog)
+            if len(progReg) > 0:
+                pReg.append(True)
+            else:
+                pReg.append(False)
+    except:
+        pReg = [False for _ in programs]
+    
+    values[0]["registered"] = reg
     values[0]["programs"] = list(programs.values())
+    for i in range(len(values[0]["programs"])):
+        values[0]['programs'][i]["registered"] = pReg[i]
+    print(values[0]["registered"])
     return JsonResponse(values, safe=False)
+
+@csrf_exempt
+def register_program(req):
+    body = json.loads(req.body)
+    token, program_id = body["token"], body["id"]
+    
+    username = check_login(token)
+    user = User.objects.get(username=username["name"])
+    customUser = CustomUser.objects.get(user=user)
+
+    try:
+        program = Program.objects.get(id=program_id)
+        Program_registration.objects.get(user=customUser, program=program)
+        return JsonResponse({"message": "Na tento program už ste zaregistrovaný"}, status=401)
+    except:
+        pass
+
+    try:
+        preg = Program_registration.objects.create(
+            user=customUser,
+            program=program,
+        )
+    except Exception as error:
+        return JsonResponse({"message": "Nepodarilo sa zaregistrovať na program"}, status=401)
+
+    preg.save()
+
+    return JsonResponse({})

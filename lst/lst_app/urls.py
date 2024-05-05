@@ -12,4 +12,5 @@ urlpatterns = [
     path('add_feedback', add_feedback),
     path('programs/<int:id>', get_programs),
     path('<str:type>/<int:id>', get_action),
+    path('register_program', register_program),
 ]
