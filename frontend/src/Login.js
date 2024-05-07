@@ -4,6 +4,7 @@ import "./Register.css"
 import {TextField, CardMedia, Button} from '@mui/material';
 import axios from 'axios'
 import {hostname} from './config';
+import Menu from './Menu'
 
 export default function Login () {
     const [name, setName] = useState('')
@@ -16,6 +17,8 @@ export default function Login () {
         }).then(function ({data}) {
             localStorage.setItem("username", name)
             localStorage.setItem("token", data.token)
+            localStorage.setItem("org", data.org)
+            console.log(data.org)
             window.location.replace(window.location.origin) 
         }).catch(function (error) {
             if (error.response?.data?.message !== null) {
@@ -29,6 +32,7 @@ export default function Login () {
     }
     return (      
         <>
+        <Menu />
         <div className="container">
             <form>
                 <h2>Prihlásenie</h2>

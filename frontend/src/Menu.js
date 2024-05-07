@@ -4,9 +4,6 @@ import ListItem from '@mui/material/ListItem';
 
 import { useState } from 'react'
 import "./Register.css"
-import {TextField, CardMedia, Button} from '@mui/material';
-import axios from 'axios'
-import {hostname} from './config';
 
 import * as React from 'react';
 import ListSubheader from '@mui/material/ListSubheader';
@@ -27,6 +24,11 @@ export default function Menu () {
                 </ListSubheader>
             }
             >
+              { (localStorage["org"] != null && localStorage["org"] == "true") && 
+            <ListItemButton href="/org">
+              <ListItemText primary="Interné stránky" />
+            </ListItemButton>
+            }
             <ListItemButton href='/'>
             <ListItemText primary="Hlavná stránka" />
             </ListItemButton>
@@ -40,7 +42,7 @@ export default function Menu () {
               <ListItemText primary="Staršie akcie" />
             </ListItemButton>
             { (localStorage["token"] != null) && 
-            <ListItemButton href="my_programs">
+            <ListItemButton href="/my_programs">
               <ListItemText primary="Moje programy" />
             </ListItemButton>
             }
