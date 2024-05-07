@@ -29,7 +29,9 @@ def login(req):
         return JsonResponse({"message": "Nesprávne heslo"}, status=401)
 
     token = jwt.encode({"name": name}, key=settings.SECRET_KEY, algorithm="HS256")
-    return JsonResponse({"token": token})
+    roles = CustomUser.objects.get(user=user).roles.all()
+    print(len(roles)>0)
+    return JsonResponse({"token": token, "org":(len(roles)>0)})
     
 @csrf_exempt
 def register(req):
@@ -106,7 +108,7 @@ def load_my_events(req):
         username = check_login(token)
     except:
         return JsonResponse({"message": "Nie ste prihlásený"}, status=401)
-    events = Event.objects.filter(visible=True).filter(end__range=[datetime.now(), datetime.now()+timedelta(days=10000)])
+    events = Event.objects.filter(visible=True)
     registrations = []
 
     if username:
@@ -200,7 +202,6 @@ def add_feedback(req):
 
 @csrf_exempt
 def get_action(req, type, id):
-
     try:
         action = Program.objects.filter(id=id) if type == 'program' else Event.objects.filter(id=id)
     except:
@@ -237,8 +238,10 @@ def get_programs(req, id):
     values[0]["registered"] = reg
     values[0]["programs"] = list(programs.values())
     for i in range(len(values[0]["programs"])):
+        print(programs[i].program_type)
         values[0]['programs'][i]["registered"] = pReg[i]
-    print(values[0]["registered"])
+        values[0]["programs"][i]["program_type"] = programs[i].program_type.name
+    print(values[0]["programs"])
     return JsonResponse(values, safe=False)
 
 @csrf_exempt
@@ -267,4 +270,51 @@ def register_program(req):
 
     preg.save()
 
+    return JsonResponse({})
+
+@csrf_exempt
+def load_my_programs(req):
+    username = None
+    try:
+        token = req.GET["token"]
+        username = check_login(token)
+    except:
+        return JsonResponse({"message": "Nie ste prihlásený"}, status=401)
+    programs = Program.objects.filter(visible=True)
+    registrations = []
+
+    if username:
+        user = User.objects.get(username=username["name"])
+        cUser = CustomUser.objects.get(user=user)
+        for prog in programs:
+            if Program_registration.objects.filter(user=cUser, program=prog):
+                registrations.append(True)
+            else:
+                registrations.append(False)
+    if len(registrations) == 0:
+        registrations = [False for prog in programs]
+    res = list(programs.values())
+    myprograms = []
+    for i in range(len(res)):
+        if registrations[i]:
+            res[i]["registered"] = registrations[i]
+            res[i]["type"] = programs[i].program_type.name
+            myprograms.append(res[i])
+    return JsonResponse(myprograms, safe=False)
+
+@csrf_exempt
+def logout(req, aType, id):
+    body = json.loads(req.body)
+    token = body["token"]
+    
+    username = check_login(token)
+
+    try:
+        user = User.objects.get(username=username["name"])
+        cUser = CustomUser.objects.get(user=user)
+        action = Event.objects.get(id=id) if aType == "event" else Program.objects.get(id=id)
+        reg = Event_registration.objects.get(user=cUser, event=action) if aType=="event" else Program_registration.objects.get(user=cUser, program=action)
+        reg.delete()
+    except:
+        return JsonResponse({"message": "Nepodarilo sa zrušiť registráciu"}, status=401)
     return JsonResponse({})

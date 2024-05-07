@@ -25,6 +25,30 @@ export default function EventInfo(props) {
         });
     }
 
+    const HandleLogOut = (program) =>{
+        axios.post(`http://${hostname}:8000/api/logout/program/${program.id}`, {
+            token: localStorage["token"],
+        }).then(function ({data}) {
+            window.location.reload()
+        }).catch(function (error) {
+            if (error.response?.data?.message !== null) {
+                alert(error.response.data.message)
+            } else {alert(error)};
+        });
+    }
+
+    const HandleELogOut = (evemt) =>{
+        axios.post(`http://${hostname}:8000/api/logout/event/${event.id}`, {
+            token: localStorage["token"],
+        }).then(function ({data}) {
+            window.location.reload()
+        }).catch(function (error) {
+            if (error.response?.data?.message !== null) {
+                alert(error.response.data.message)
+            } else {alert(error)};
+        });
+    }
+
     const getData =async ()=> {
         try {
             const {data} = await axios.get(`http://${hostname}:8000/api/programs/${id}`, { params:
@@ -44,15 +68,16 @@ export default function EventInfo(props) {
         getData()
       }, []);
     
-    
     const myList = []
     let loggedin = false;
     if (localStorage["token"] != null) {
         loggedin = true;
     }
     if (event?.programs != null) {
+        console.log(event.programs)
         myList.push(event.programs.map((item) => <div className="event">
         <h2>{item.name}</h2>
+        <h4>{item.program_type}</h4>
         {item.more_info !== null &&
             <p>{item.more_info}</p>
         }
@@ -90,6 +115,8 @@ export default function EventInfo(props) {
             {!loggedin && event.registration_end != null && (event.registration_start == null || new Date(event.registration_start) < new Date()) && <a href="/login" className='info'>Najskôr sa musíte prihlásiť</a>}
             {event.registered && <div className="success">Na túto akciu ste zaregistrovaný</div>}
             {event.registration_start != null && new Date(event.registration_start) > new Date() && <div className="info"> Registrácia od: {event.registration_start.substring(0,10)} </div>}
+            {event.registered && <Button href={`/feedback/event/${event.id}`}>Feedback</Button>}
+            {event.registered && <div className='logOut'><Button color='inherit' onClick={() => HandleELogOut(event)}> Zrušiť registráciu </Button></div>}
                 </div>}
             {myList}
         </div>

@@ -1,5 +1,5 @@
 from django.urls import path
-from lst_app.views import *  # login, register, load, get_event, register_event, load_old, load_my_events, add_feedback
+from lst_app.views import *  
 
 urlpatterns = [
     path('login', login),
@@ -11,6 +11,8 @@ urlpatterns = [
     path('myevents', load_my_events),
     path('add_feedback', add_feedback),
     path('programs/<int:id>', get_programs),
+    path('myprograms', load_my_programs),
     path('<str:type>/<int:id>', get_action),
     path('register_program', register_program),
+    path('logout/<str:aType>/<int:id>', logout),
 ]
