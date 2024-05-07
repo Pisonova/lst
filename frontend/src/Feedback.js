@@ -7,6 +7,8 @@ import Checkbox from '@mui/material/Checkbox';
 import { FormLabel, RadioGroup, FormGroup, FormControlLabel } from '@mui/material'
 import { hostname } from './config';
 import { useParams } from 'react-router-dom'
+import Menu from './Menu'
+import LoginLogic from './LoginLogic';
 
 
 export default function Feedback(props) {
@@ -57,6 +59,7 @@ export default function Feedback(props) {
       }, []);
        
     return (<>
+        <div> <Menu /> <LoginLogic />
         <div className="container">
             <FormGroup>
                 <h2>Feedback na akciu:</h2>
@@ -91,6 +94,7 @@ export default function Feedback(props) {
                 <Button variant="contained" onClick={handleSubmit}>Submit</Button>
                 </div>
             </FormGroup>
+        </div>
         </div>
     </>)
 }

@@ -5,17 +5,12 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button'
 import { hostname } from './config';
 import Menu from "./Menu.js"
+import LoginLogic from './LoginLogic.js';
 import { useParams } from 'react-router-dom'
  
 export default function EventInfo(props) {
     const [event, setEvent] = useState()
     const id = useParams()["id"]
-
-    const HandleLogIn = () =>{
-        if (localStorage.getItem["token"] !== null) {
-            delete localStorage["token"];
-        }
-    }
 
     const HandleProgramReg = (id) =>{
         axios.post(`http://${hostname}:8000/api/register_program`, {
@@ -72,32 +67,15 @@ export default function EventInfo(props) {
             {!loggedin && item.registration_end != null && (item.registration_start == null || new Date(item.registration_start) < new Date()) && <a href="/login" className='info'>Najskôr sa musíte prihlásiť</a>}
             {item.registered && <div className="success">Na tento program ste zaregistrovaný</div>}
             {item.registration_start != null && new Date(item.registration_start) > new Date() && <div className="info"> Registrácia od: {item.registration_start.substring(0,10)} </div>}
-                
+            {item.registered && <Button href={`/feedback/program/${item.id}`}>Feedback</Button>}
+            {item.registered && <div className='logOut'><Button color='inherit' onClick={() => HandleLogOut(item)}> Zrušiť registráciu </Button></div>}   
         </div>))
     } 
-    
-    let txt = "Odhlásiť sa";
-    let adr = "/"
-    let welcome = ""
-    if (localStorage["token"] != null) {
-        welcome = "Ste prihlásený ako " + localStorage["username"];
-    }
-    if (localStorage["token"] == null) {
-        txt = "Prihlásiť sa";
-        adr = "/login";
-    }
-    console.log(event)
 
     return (<>
         <div>
             <Menu />
-            <div className="btn">
-                <Button href={adr} onClick={HandleLogIn}>{txt}</Button>
-                {(localStorage["token"] == null) ? (<Button href='/registration'> Zaregistrovať sa</Button>) : (<div></div>)}
-            </div>
-            <div className='log'>
-                <p>{welcome}</p>
-            </div>
+            <LoginLogic />
            {event != null && <div className="event">
             <h2>{event.name}</h2>
         {event.more_info != null && event != "" && 

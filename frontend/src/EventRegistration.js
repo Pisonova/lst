@@ -8,7 +8,8 @@ import Checkbox from '@mui/material/Checkbox'
 import { FormLabel, RadioGroup, FormGroup, FormControlLabel } from '@mui/material'
 import { hostname } from './config';
 import { useParams } from 'react-router-dom'
-
+import Menu from './Menu.js';
+import LoginLogic from './LoginLogic';
 
 export default function EventRegistration (props) {
     const [lunches, setLunches] = useState(0)
@@ -63,6 +64,9 @@ export default function EventRegistration (props) {
       }
        
     return (<>
+        <div>
+            <Menu />
+            <LoginLogic />
         <div className="container">
             <FormGroup>
                 <h2>Registrácia na akciu:</h2>
@@ -87,6 +91,7 @@ export default function EventRegistration (props) {
                 </FormGroup>
                 <Button variant="contained" onClick={handleSubmit}>Submit</Button>
             </FormGroup>
+        </div>
         </div>
     </>)
 }

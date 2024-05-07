@@ -4,6 +4,7 @@ import "./Register.css"
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button'
 import { hostname } from './config';
+import Menu from './Menu'
 
 
 export default function Register () {
@@ -49,6 +50,7 @@ export default function Register () {
     }
     return (
         <>
+        <Menu />
         <div className="container">
             <form>
                 <h2>Registrácia</h2>

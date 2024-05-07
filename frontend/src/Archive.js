@@ -5,15 +5,10 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button'
 import { hostname } from './config';
 import Menu from "./Menu.js"
+import LoginLogic from './LoginLogic.js';
  
 export default function Archive () {
     const [events, setEvents] = useState([])
-
-    const HandleLogIn = () =>{
-        if (localStorage.getItem["token"] !== null) {
-            delete localStorage["token"];
-        }
-    }
     
     const getData =async ()=> {
         try {
@@ -33,33 +28,18 @@ export default function Archive () {
         loggedin = true;
     }
     const myList = events.map((item) => <div className="event">
-        <h2>{item.name}</h2>
+        <Button href={`/event_info/${item.id}`} > <h2>{item.name}</h2> </Button>
         {item.more_info !== null &&
             <p>{item.more_info}</p>
         }
             <p>Začiatok: {item.start.substring(0,10)} </p>
             <p>Koniec: {item.end.substring(0, 10)}</p>
         </div>)
-    let txt = "Odhlásiť sa";
-    let adr = "/"
-    let welcome = ""
-    if (localStorage["token"] != null) {
-        welcome = "Ste prihlásený ako " + localStorage["username"];
-    }
-    if (localStorage["token"] == null) {
-        txt = "Prihlásiť sa";
-        adr = "/login";
-    }
+
     return (<>
         <div>
             <Menu />
-            <div className="btn">
-                <Button href={adr} onClick={HandleLogIn}>{txt}</Button>
-                {(localStorage["token"] == null) ? (<Button href='/registration'> Zaregistrovať sa</Button>) : (<div></div>)}
-            </div>
-            <div className='log'>
-                <p>{welcome}</p>
-            </div>
+            <LoginLogic />
             {myList}
         </div>
     </>)
