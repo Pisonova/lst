@@ -143,21 +143,20 @@ def register_event(req):
     token, event_id = body["token"], body["event_id"]
     lunches, accomodations = body["lunches"], body["accomodations"]
 
-    username = check_login(token)
-    user = User.objects.get(username=username["name"])
-    customUser = CustomUser.objects.get(user=user)
-    event = Event.objects.get(id=event_id)
-    accs = event.accomodation_dates.all()
-
     try:
-        Event_registration.objects.get(user=customUser, event=event)
+        username = check_login(token)
+        user = User.objects.get(username=username["name"])
+        cUser = CustomUser.objects.get(user=user)
+        event = Event.objects.get(id=event_id)
+        accs = event.accomodation_dates.all()
+        Event_registration.objects.get(user=cUser, event=event)
         return JsonResponse({"message": "Na túto akciu už ste zaregistrovaný"}, status=401)
     except:
         pass
 
     try:
         ereg = Event_registration.objects.create(
-            user=customUser,
+            user=cUser,
             event=event,
             lunches=int(lunches),
         )
@@ -165,6 +164,22 @@ def register_event(req):
         for i in range(len(accomodations)):
             if accomodations[i]:
                 ereg.accomodation_dates.add(accs[i])
+
+        if len(cUser.roles.all()) > 0:
+            print("tuuu")
+            roleType = Role_type.objects.get(name="org")
+            role = Role.objects.filter(role_type=roleType, event=event)
+            print("here.")
+            if len(role) == 0:
+                role = Role.objects.create(
+                    role_type=roleType,
+                    event=event,
+                )
+                role.save()
+                print("here?")
+            else:
+                role = role[0]
+            cUser.roles.add(role)
 
     except Exception as error:
         return JsonResponse({"message": "Nepodarilo sa zaregistrovať na akciu"}, status=401)
@@ -315,6 +330,16 @@ def logout(req, aType, id):
         action = Event.objects.get(id=id) if aType == "event" else Program.objects.get(id=id)
         reg = Event_registration.objects.get(user=cUser, event=action) if aType=="event" else Program_registration.objects.get(user=cUser, program=action)
         reg.delete()
+        if aType == "event" and len(cUser.roles.all()) > 0:
+            cuRoles = cUser.roles.all()
+            toRemove = None
+            for role in cuRoles:
+                if role.role_type.name == 'org' and role.event==action:
+                    toRemove = role
+            print(toRemove)
+            if cuRoles is not None:
+                cUser.roles.remove(toRemove)
+            print("done")
     except:
         return JsonResponse({"message": "Nepodarilo sa zrušiť registráciu"}, status=401)
     return JsonResponse({})
