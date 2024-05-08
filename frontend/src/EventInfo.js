@@ -101,6 +101,7 @@ export default function EventInfo(props) {
             {item.registered && <div className="success">Na tento program ste zaregistrovaný</div>}
             {item.registration_start != null && new Date(item.registration_start) > new Date() && <div className="info"> Registrácia od: {item.registration_start.substring(0,10)} </div>}
             {item.registered && <Button href={linkstart + `program/${item.id}`}> {fb} </Button>}
+            {item.registered && <Button href={`registered/program/${item.id}`}> Prihlásení používatelia </Button>}
             {item.registered && <div className='logOut'><Button color='inherit' onClick={() => HandleLogOut(item)}> Zrušiť registráciu </Button></div>}   
         </div>))
     } 
@@ -124,6 +125,7 @@ export default function EventInfo(props) {
             {event.registered && <div className="success">Na túto akciu ste zaregistrovaný</div>}
             {event.registration_start != null && new Date(event.registration_start) > new Date() && <div className="info"> Registrácia od: {event.registration_start.substring(0,10)} </div>}
             {event.registered && <Button href={linkstart + `event/${event.id}`}> {fb} </Button>}
+            {event.registered && <Button href={`/registered/event/${event.id}`}> Prihlásení používatelia </Button>}
             {event.registered && <div className='logOut'><Button color='inherit' onClick={() => HandleELogOut(event)}> Zrušiť registráciu </Button></div>}
                 </div>}
             {myList}

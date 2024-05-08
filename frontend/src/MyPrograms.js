@@ -27,6 +27,19 @@ export default function MyPrograms () {
         getData()
       }, []);
   
+    
+    const HandleLogOut = (program) =>{
+        axios.post(`http://${hostname}:8000/api/logout/program/${program.id}`, {
+            token: localStorage["token"],
+        }).then(function ({data}) {
+            window.location.reload()
+        }).catch(function (error) {
+            if (error.response?.data?.message !== null) {
+                alert(error.response.data.message)
+            } else {alert(error)};
+        });
+    }
+
     let linkstart = '/feedback/'
     let fb = "Feedback"
     if (localStorage["org"] == 'true') { 
@@ -43,6 +56,8 @@ export default function MyPrograms () {
             <p>Začiatok: {item.start.substring(0,10)} </p>
             <p>Koniec: {item.end.substring(0, 10)}</p>
             <Button href={linkstart + `program/${item.id}`} > {fb} </Button>
+            {item.registered && <Button href={`registered/program/${item.id}`}> Prihlásení používatelia </Button>}
+            {item.registered && <div className='logOut'><Button color='inherit' onClick={() => HandleLogOut(item)}> Zrušiť registráciu </Button></div>}   
         </div>)
 
     return (<>

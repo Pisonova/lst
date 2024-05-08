@@ -42,6 +42,8 @@ export default function MyEvents () {
             <p>Začiatok: {item.start.substring(0,10)} </p>
             <p>Koniec: {item.end.substring(0, 10)}</p>
             <Button href={linkstart+item.id} > {fb} </Button>
+            {item.registered && <Button href={`/registered/event/${item.id}`}> Prihlásení používatelia </Button>}
+            
         </div>)
 
     return (<>
