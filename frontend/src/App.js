@@ -9,6 +9,7 @@ import Feedback from './Feedback'
 import EventInfo from './EventInfo'
 import MyPrograms from './MyPrograms'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ShowFeedbacks from './ShowFeedbacks';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/my_programs" element={<MyPrograms/>} />
           <Route path="/event_info/:id" element={<EventInfo />} />
+          <Route path="feedbacks/:type/:id" element={<ShowFeedbacks />} />
           <Route path="/feedback/:type/:id" element={<Feedback />} />
           <Route path="/my_events" element={<MyEvents />} />
           <Route path="/archive" element={<Archive />} />

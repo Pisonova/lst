@@ -343,3 +343,55 @@ def logout(req, aType, id):
     except:
         return JsonResponse({"message": "Nepodarilo sa zrušiť registráciu"}, status=401)
     return JsonResponse({})
+
+@csrf_exempt
+def get_feedbacks(req, aType, id):
+    username = None
+    try:
+        token = req.GET["token"]
+        username = check_login(token)
+        user = User.objects.get(username=username["name"])
+        cUser = CustomUser.objects.get(user=user)
+        roles = []
+        rt = Role_type.objects.get(name="org")
+        if aType == "event":
+            event = Event.objects.get(id=id)
+            roles.append(Role.objects.get(role_type=rt, event=event))
+        else:
+            for event in Program.objects.get(id=id).events.all():
+                try:
+                    roles.append(Role.objects.get(role_type=rt, event=event))
+                except:
+                    pass
+        access = False
+        for role in roles:
+            if role in cUser.roles.all():
+                access = True
+                break
+        if not access:
+            return JsonResponse({"message": "Nemáte oprávnenia"}, status=401)
+    except:
+        return JsonResponse({"message": "Nemáte oprávnenia"}, status=401)
+
+    if aType=="event":
+        event = Event.objects.get(id=id)
+        feedbacks = Feedback.objects.filter(event=event)
+    else:
+        program = Program.objects.get(id=id)
+        feedbacks = Feedback.objects.filter(program=program)
+    firstnames = []
+    lastnames = []
+    alt_fbs = list(feedbacks.values())
+    for fb in feedbacks:
+        if fb.user:
+            firstnames.append(fb.user.user.first_name)
+            lastnames.append(fb.user.user.last_name)
+        else:
+            firstnames.append(None)
+            lastnames.append(None)
+    feedbacks = list(feedbacks.values())
+    for i in range(len(feedbacks)):
+        feedbacks[i]["first_name"] = firstnames[i]
+        feedbacks[i]["last_name"] = lastnames[i]
+
+    return JsonResponse(feedbacks, safe=False)
