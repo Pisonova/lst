@@ -62,6 +62,8 @@ class CustomUser(models.Model):
     def email(self):
         return self.user.email
 
+    def __str__(self):
+        return self.user_name()
 
 class Program(Action):
     program_type = models.ForeignKey(Program_type, on_delete=models.CASCADE)
