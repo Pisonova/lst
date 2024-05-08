@@ -16,4 +16,5 @@ urlpatterns = [
     path('register_program', register_program),
     path('logout/<str:aType>/<int:id>', logout),
     path('feedbacks/<str:aType>/<int:id>', get_feedbacks),
+    path('registered/<str:aType>/<int:id>', get_registered),
 ]

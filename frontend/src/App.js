@@ -10,6 +10,7 @@ import EventInfo from './EventInfo'
 import MyPrograms from './MyPrograms'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ShowFeedbacks from './ShowFeedbacks';
+import RegisteredUsers from './RegisteredUsers';
 
 
 function App() {
@@ -18,8 +19,9 @@ function App() {
         <Routes>
           <Route path="/my_programs" element={<MyPrograms/>} />
           <Route path="/event_info/:id" element={<EventInfo />} />
-          <Route path="feedbacks/:type/:id" element={<ShowFeedbacks />} />
+          <Route path="/feedbacks/:type/:id" element={<ShowFeedbacks />} />
           <Route path="/feedback/:type/:id" element={<Feedback />} />
+          <Route path="/registered/:type/:id" element={<RegisteredUsers />} />
           <Route path="/my_events" element={<MyEvents />} />
           <Route path="/archive" element={<Archive />} />
           <Route path="/registration" element={<Register />} />
