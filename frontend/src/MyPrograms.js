@@ -26,6 +26,13 @@ export default function MyPrograms () {
     useEffect(() => {
         getData()
       }, []);
+  
+    let linkstart = '/feedback/'
+    let fb = "Feedback"
+    if (localStorage["org"] == 'true') { 
+        linkstart='/feedbacks/'
+        fb = "Feedbacky od účastníkov" 
+    }
 
     const myList = programs.map((item) => <div className="event">
         <h2>{item.name}</h2>
@@ -35,7 +42,7 @@ export default function MyPrograms () {
         }
             <p>Začiatok: {item.start.substring(0,10)} </p>
             <p>Koniec: {item.end.substring(0, 10)}</p>
-            <Button href={`/feedback/program/${item.id}`} > Feedback </Button>
+            <Button href={linkstart + `program/${item.id}`} > {fb} </Button>
         </div>)
 
     return (<>

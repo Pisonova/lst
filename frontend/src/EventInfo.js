@@ -73,6 +73,14 @@ export default function EventInfo(props) {
     if (localStorage["token"] != null) {
         loggedin = true;
     }
+
+    let linkstart = '/feedback/'
+    let fb = "Feedback"
+    if (localStorage["org"] == 'true') { 
+        linkstart='/feedbacks/'
+        fb = "Feedbacky od účastníkov" 
+    }
+
     if (event?.programs != null) {
         console.log(event.programs)
         myList.push(event.programs.map((item) => <div className="event">
@@ -92,7 +100,7 @@ export default function EventInfo(props) {
             {!loggedin && item.registration_end != null && (item.registration_start == null || new Date(item.registration_start) < new Date()) && <a href="/login" className='info'>Najskôr sa musíte prihlásiť</a>}
             {item.registered && <div className="success">Na tento program ste zaregistrovaný</div>}
             {item.registration_start != null && new Date(item.registration_start) > new Date() && <div className="info"> Registrácia od: {item.registration_start.substring(0,10)} </div>}
-            {item.registered && <Button href={`/feedback/program/${item.id}`}>Feedback</Button>}
+            {item.registered && <Button href={linkstart + `program/${item.id}`}> {fb} </Button>}
             {item.registered && <div className='logOut'><Button color='inherit' onClick={() => HandleLogOut(item)}> Zrušiť registráciu </Button></div>}   
         </div>))
     } 
@@ -115,7 +123,7 @@ export default function EventInfo(props) {
             {!loggedin && event.registration_end != null && (event.registration_start == null || new Date(event.registration_start) < new Date()) && <a href="/login" className='info'>Najskôr sa musíte prihlásiť</a>}
             {event.registered && <div className="success">Na túto akciu ste zaregistrovaný</div>}
             {event.registration_start != null && new Date(event.registration_start) > new Date() && <div className="info"> Registrácia od: {event.registration_start.substring(0,10)} </div>}
-            {event.registered && <Button href={`/feedback/event/${event.id}`}>Feedback</Button>}
+            {event.registered && <Button href={linkstart + `event/${event.id}`}> {fb} </Button>}
             {event.registered && <div className='logOut'><Button color='inherit' onClick={() => HandleELogOut(event)}> Zrušiť registráciu </Button></div>}
                 </div>}
             {myList}
