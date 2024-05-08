@@ -24,11 +24,6 @@ export default function Menu () {
                 </ListSubheader>
             }
             >
-              { (localStorage["org"] != null && localStorage["org"] == "true") && 
-            <ListItemButton href="/org">
-              <ListItemText primary="Interné stránky" />
-            </ListItemButton>
-            }
             <ListItemButton href='/'>
             <ListItemText primary="Hlavná stránka" />
             </ListItemButton>
