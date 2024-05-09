@@ -41,6 +41,16 @@ export default function Menu () {
               <ListItemText primary="Moje programy" />
             </ListItemButton>
             }
+            { (localStorage["org"] != null && localStorage["org"] == "true") &&
+              <ListItemButton href="/actions_users">
+              <ListItemText primary="Prihlásený používatelia" />
+              </ListItemButton>
+            }
+            { (localStorage["org"] != null && localStorage["org"] == "true") &&
+              <ListItemButton href="/actions_feedbacks">
+              <ListItemText primary="Feedbacky" />
+              </ListItemButton>
+            }
           </List>
         </>
     )
