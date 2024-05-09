@@ -6,8 +6,7 @@ import { hostname } from './config';
 import Menu from "./Menu.js"
 import LoginLogic from './LoginLogic.js';
 import { useParams } from 'react-router-dom'
-import { Checkmark } from 'react-checkmark'
-import { AiOutlineClose } from "react-icons/ai";
+import { Check, X } from "@phosphor-icons/react"
  
 export default function RegisteredUsers() {
     const [users, setUsers] = useState([])
@@ -61,8 +60,8 @@ export default function RegisteredUsers() {
         <td> {item.last_name} </td>
         <td> {item.email} </td>
         {item.lunches != null && <td>{item.lunches}</td>}
-        {item.accomodations != null && item.accomodations.map((acc) => <td> {(acc && <Checkmark size="small" color="blue"/>) || <AiOutlineClose />}</td>)}
-        <td> {(item.org && <Checkmark size="small" color="blue"/>) || <AiOutlineClose />} </td>
+        {item.accomodations != null && item.accomodations.map((acc) => <td> {(acc && <Check size={32} color="#2fc700"/>) || <X size={32} color="#e01b24"/>}</td>)}
+        <td> {(item.org && <Check size={32} color="#2fc700"/>) || <X size={32} color="#e01b24"/>} </td>
     </tr>))
     }
 
@@ -73,12 +72,14 @@ export default function RegisteredUsers() {
             <div class="list">
                 <table class="users">
                     <thead>
+                        <tr>
                         <th scope="col"> <div>Meno</div> </th>
                         <th scope="col"> <div>Priezvisko</div> </th>
                         <th scope="col"> <div>Email</div> </th>
                         {type == "event" && <th scope="col"> <div> Obedy </div> </th>}
                         {acc_dates}
                         <th scope="col"> <div>Organizátor</div> </th>
+                        </tr>
                     </thead>
                     <tbody>
                         {myList}
