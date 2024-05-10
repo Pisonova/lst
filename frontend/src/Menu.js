@@ -42,12 +42,12 @@ export default function Menu () {
             </ListItemButton>
             }
             { (localStorage["org"] != null && localStorage["org"] == "true") &&
-              <ListItemButton href="/actions_users">
-              <ListItemText primary="Prihlásený používatelia" />
+              <ListItemButton href="/actions/registered">
+              <ListItemText primary="Prihlásení používatelia" />
               </ListItemButton>
             }
             { (localStorage["org"] != null && localStorage["org"] == "true") &&
-              <ListItemButton href="/actions_feedbacks">
+              <ListItemButton href="/actions/feedbacks">
               <ListItemText primary="Feedbacky" />
               </ListItemButton>
             }

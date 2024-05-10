@@ -11,12 +11,14 @@ import MyPrograms from './MyPrograms'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ShowFeedbacks from './ShowFeedbacks';
 import RegisteredUsers from './RegisteredUsers';
+import ActionsLinks from './ActionsLinks';
 
 
 function App() {
     return (
       <BrowserRouter>
         <Routes>
+          <Route path="actions/:type" element={<ActionsLinks />} />
           <Route path="/my_programs" element={<MyPrograms/>} />
           <Route path="/event_info/:id" element={<EventInfo />} />
           <Route path="/feedbacks/:type/:id" element={<ShowFeedbacks />} />

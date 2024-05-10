@@ -69,8 +69,8 @@ export default function RegisteredUsers() {
         <div>
             <Menu />
             <LoginLogic />
-            <div class="list">
-                <table class="users">
+            <div className="list">
+                <table className="users">
                     <thead>
                         <tr>
                         <th scope="col"> <div>Meno</div> </th>

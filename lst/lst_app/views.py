@@ -431,6 +431,41 @@ def get_registered(req, aType, id):
     else:
         program = Program.objects.get(id=id)
         regs = Program_registration.objects.filter(program=program)
+@csrf_exempt
+def get_registered(req, aType, id):
+    username = None
+    try:
+        token = req.GET["token"]
+        username = check_login(token)
+        user = User.objects.get(username=username["name"])
+        cUser = CustomUser.objects.get(user=user)
+        roles = []
+        rt = Role_type.objects.get(name="org")
+        if aType == "event":
+            event = Event.objects.get(id=id)
+            roles.append(Role.objects.get(role_type=rt, event=event))
+        else:
+            for event in Program.objects.get(id=id).events.all():
+                try:
+                    roles.append(Role.objects.get(role_type=rt, event=event))
+                except:
+                    pass
+        access = False
+        for role in roles:
+            if role in cUser.roles.all():
+                access = True
+                break
+        if not access:
+            return JsonResponse({"message": "Nemáte oprávnenia"}, status=401)
+    except:
+        return JsonResponse({"message": "Nemáte oprávnenia"}, status=401)
+
+    if aType=="event":
+        event = Event.objects.get(id=id)
+        regs = Event_registration.objects.filter(event=event)
+    else:
+        program = Program.objects.get(id=id)
+        regs = Program_registration.objects.filter(program=program)
 
     
     firstnames = []
@@ -456,3 +491,59 @@ def get_registered(req, aType, id):
     print(alt_regs)
 
     return JsonResponse(alt_regs, safe=False)
+
+    
+    firstnames = []
+    lastnames = []
+    emails = []
+    alt_regs = list(regs.values())
+    if aType == "event":
+        acc_dates = event.accomodation_dates.all()
+        for i in range(len(regs)):
+            reg_acc_dates = []
+            for date in acc_dates:
+                if date in regs[i].accomodation_dates.all():
+                    reg_acc_dates.append(True)
+                else:
+                    reg_acc_dates.append(False)
+            alt_regs[i]["accomodations"] = reg_acc_dates
+
+    for i in range(len(regs)):
+        alt_regs[i]["first_name"] = regs[i].user.first_name()
+        alt_regs[i]["last_name"] = regs[i].user.surname()
+        alt_regs[i]["email"] = regs[i].user.email()
+        alt_regs[i]["org"] = (len(regs[i].user.roles.all()) > 0)
+    print(alt_regs)
+
+    return JsonResponse(alt_regs, safe=False)
+
+@csrf_exempt
+def get_actions(req):
+    try:
+        token = req.GET["token"]
+        username = check_login(token)
+        user = User.objects.get(username=username["name"])
+        cUser = CustomUser.objects.get(user=user)
+        if len(cUser.roles.all()) == 0:
+            return JsonResponse({"message": "Nemáte oprávnenia"}, status=401)
+        events, programs = [], []
+        for role in cUser.roles.all():
+            if role.event:
+                events.append(role.event)
+                ePrograms = Program.objects.filter(events__id=role.event.id)
+                for p in ePrograms:
+                    if p not in programs:
+                        programs.append(p)
+    except:
+        return JsonResponse({"message": "Nemáte oprávnenia"}, status=401)
+
+    print(programs, events)
+    new_events, new_programs = [], []
+    for event in events:
+        new_events.append({"id": event.id, "name": event.name, "type": "event"})
+    for program in programs:
+        new_programs.append({"id": program.id, "name": program.name, "type": "program"})
+    actions = {"programs": new_programs, "events": new_events}
+
+    return JsonResponse(actions, safe=False)
+
