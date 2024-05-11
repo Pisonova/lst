@@ -67,7 +67,7 @@ class CustomUser(models.Model):
 
 class Program(Action):
     program_type = models.ForeignKey(Program_type, on_delete=models.CASCADE)
-    organizers = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    organizers = models.ManyToManyField(CustomUser, blank=True)
     events = models.ManyToManyField(Event, blank=True)
 
     def __str__(self):
