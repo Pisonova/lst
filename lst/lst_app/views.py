@@ -30,7 +30,6 @@ def login(req):
 
     token = jwt.encode({"name": name}, key=settings.SECRET_KEY, algorithm="HS256")
     roles = CustomUser.objects.get(user=user).roles.all()
-    print(len(roles)>0)
     return JsonResponse({"token": token, "org":(len(roles)>0)})
     
 @csrf_exempt
@@ -166,17 +165,14 @@ def register_event(req):
                 ereg.accomodation_dates.add(accs[i])
 
         if len(cUser.roles.all()) > 0:
-            print("tuuu")
             roleType = Role_type.objects.get(name="org")
             role = Role.objects.filter(role_type=roleType, event=event)
-            print("here.")
             if len(role) == 0:
                 role = Role.objects.create(
                     role_type=roleType,
                     event=event,
                 )
                 role.save()
-                print("here?")
             else:
                 role = role[0]
             cUser.roles.add(role)
@@ -235,7 +231,6 @@ def get_programs(req, id):
     try:
         token = req.GET["token"]
         username = check_login(token)["name"]
-        print(username)
         user = User.objects.get(username=username)
         cUser = CustomUser.objects.get(user=user)
         regs = Event_registration.objects.filter(user=cUser, event=event[0])
@@ -253,10 +248,8 @@ def get_programs(req, id):
     values[0]["registered"] = reg
     values[0]["programs"] = list(programs.values())
     for i in range(len(values[0]["programs"])):
-        print(programs[i].program_type)
         values[0]['programs'][i]["registered"] = pReg[i]
         values[0]["programs"][i]["program_type"] = programs[i].program_type.name
-    print(values[0]["programs"])
     return JsonResponse(values, safe=False)
 
 @csrf_exempt
@@ -336,10 +329,8 @@ def logout(req, aType, id):
             for role in cuRoles:
                 if role.role_type.name == 'org' and role.event==action:
                     toRemove = role
-            print(toRemove)
             if cuRoles is not None:
                 cUser.roles.remove(toRemove)
-            print("done")
     except:
         return JsonResponse({"message": "Nepodarilo sa zrušiť registráciu"}, status=401)
     return JsonResponse({})
@@ -488,7 +479,6 @@ def get_registered(req, aType, id):
         alt_regs[i]["last_name"] = regs[i].user.surname()
         alt_regs[i]["email"] = regs[i].user.email()
         alt_regs[i]["org"] = (len(regs[i].user.roles.all()) > 0)
-    print(alt_regs)
 
     return JsonResponse(alt_regs, safe=False)
 
@@ -513,7 +503,6 @@ def get_registered(req, aType, id):
         alt_regs[i]["last_name"] = regs[i].user.surname()
         alt_regs[i]["email"] = regs[i].user.email()
         alt_regs[i]["org"] = (len(regs[i].user.roles.all()) > 0)
-    print(alt_regs)
 
     return JsonResponse(alt_regs, safe=False)
 
@@ -537,7 +526,6 @@ def get_actions(req):
     except:
         return JsonResponse({"message": "Nemáte oprávnenia"}, status=401)
 
-    print(programs, events)
     new_events, new_programs = [], []
     for event in events:
         new_events.append({"id": event.id, "name": event.name, "type": "event"})
@@ -547,3 +535,86 @@ def get_actions(req):
 
     return JsonResponse(actions, safe=False)
 
+@csrf_exempt
+def add_program(req):
+    body = json.loads(req.body)
+    token, name, visible = body["token"], body["name"], body["visible"]
+    start, end, reg_start, reg_end = body["start"], body["end"], body["reg_start"], body["reg_end"]
+    more_info, ptId = body["more_info"], body["program_typeId"],
+    organizers, events = body["organizers"], body["events"]
+    try:
+        pt = Program_type.objects.get(id=ptId)
+        new_program = Program.objects.create(
+            name=name,
+            visible=visible,
+            start=datetime.strptime(start, '%Y-%m-%dT%H:%M'),
+            end=datetime.strptime(end, '%Y-%m-%dT%H:%M'),
+            more_info=more_info,
+            program_type=pt,
+        )
+        print("ok")
+        
+        for event in events:
+            e = Event.objects.get(id=event["id"])
+            new_program.events.add(e)
+        for org in organizers:
+            o = CustomUser.objects.get(id=org["id"])
+            new_program.organizers.add(o)
+                
+    except Exception as error:
+        print(error)
+        return JsonResponse({"message": "Nepodarilo sa vytvoriť program"}, status=401)
+
+    new_program.save()
+    programs = Program.objects.all()
+    print(programs[0].start)
+    print(datetime.strptime(start, '%Y-%m-%dT%H:%M'))
+    print(token, name, visible, start, end, reg_start, reg_end)
+    print(more_info, ptId, organizers, events)
+    return JsonResponse({})
+
+@csrf_exempt
+def get_pts(req):
+    pts = Program_type.objects.all()
+    return JsonResponse(list(pts.values()), safe=False)
+
+@csrf_exempt
+def get_orgs(req):
+    try:
+        token = req.GET["token"]
+        username = check_login(token)
+        user = User.objects.get(username=username["name"])
+        cUser = CustomUser.objects.get(user=user)
+        if (len(cUser.roles.all()) == 0):
+            return JsonResponse({"message": "Neoprávnený používateľ"}, status=401)
+    except:
+        return JsonResponse({"message": "Neoprávnený používateľ"}, status=401)
+    
+    allUsers = CustomUser.objects.all()
+    orgs = [{"id": cUser.id, "first_name": cUser.user.first_name, "last_name": cUser.user.last_name}]
+    for user in allUsers:
+        if len(user.roles.all()) > 0 and user.id != cUser.id:
+            orgs.append({
+                "id": user.id, 
+                "first_name": user.user.first_name,
+                "last_name": user.user.last_name,
+            })
+    return JsonResponse(orgs, safe=False)
+
+@csrf_exempt
+def get_events(req):
+    events = []
+    try:
+        id = req.GET["eventId"]
+        event = Event.objects.get(id=id)
+        events.append({"id": event.id, "name": event.name, "start": event.start})
+    except:
+        pass
+    other_events = Event.objects.exclude(id=id)
+    for event in other_events:
+        events.append({
+            "id": event.id, 
+            "name": event.name, 
+            "start": event.start
+        })
+    return JsonResponse(events, safe=False)

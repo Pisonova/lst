@@ -51,6 +51,11 @@ export default function Menu () {
               <ListItemText primary="Feedbacky" />
               </ListItemButton>
             }
+            { (localStorage["org"] != null && localStorage["org"] == "true") &&
+              <ListItemButton href="/add_program/-1">
+              <ListItemText primary="Vytvoriť nový program" />
+              </ListItemButton>
+            }
           </List>
         </>
     )

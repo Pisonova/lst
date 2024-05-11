@@ -18,4 +18,8 @@ urlpatterns = [
     path('feedbacks/<str:aType>/<int:id>', get_feedbacks),
     path('registered/<str:aType>/<int:id>', get_registered),
     path('getactions',get_actions),
+    path('add_program', add_program),
+    path('getProgramTypes', get_pts),
+    path('getOrganizers', get_orgs),
+    path('getEvents', get_events),
 ]

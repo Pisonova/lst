@@ -12,13 +12,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ShowFeedbacks from './ShowFeedbacks';
 import RegisteredUsers from './RegisteredUsers';
 import ActionsLinks from './ActionsLinks';
-
+import NewProgram from './NewProgram'
 
 function App() {
     return (
       <BrowserRouter>
         <Routes>
-          <Route path="actions/:type" element={<ActionsLinks />} />
+          <Route path="/add_program/:id" element={<NewProgram />} />
+          <Route path="/actions/:type" element={<ActionsLinks />} />
           <Route path="/my_programs" element={<MyPrograms/>} />
           <Route path="/event_info/:id" element={<EventInfo />} />
           <Route path="/feedbacks/:type/:id" element={<ShowFeedbacks />} />

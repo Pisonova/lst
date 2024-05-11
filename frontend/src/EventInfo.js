@@ -130,6 +130,8 @@ export default function EventInfo(props) {
             {event.registered && <div className='logOut'><Button color='inherit' onClick={() => HandleELogOut(event)}> Zrušiť registráciu </Button></div>}
                 </div>}
             {myList}
+            {event != null && localStorage["org"] == "true" && event.registered && 
+            <div className="event"> <Button href={`/add_program/${event.id}`}><h2>Pridať program</h2></Button></div>}
         </div>
     </>)
 }
