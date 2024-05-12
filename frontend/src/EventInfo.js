@@ -93,7 +93,10 @@ export default function EventInfo(props) {
             <p>Začiatok: {item.start.substring(0,10)} </p>
             <p>Koniec: {item.end.substring(0, 10)}</p>
             <div className="pReg">
-            {event.registered && !item.registered && item.registration_end != null && (item.registration_start == null || new Date(item.registration_start) <= new Date()) && <Button 
+            {event.registered && !item.registered && item.registration_end != null && 
+             (item.registration_start == null || new Date(item.registration_start) <= new Date()) && 
+             (localStorage["org"] == null || localStorage["org"] == "false") &&
+             <Button 
                 color='inherit'
                 disabled={!loggedin || item.registered} 
                 onClick={() => HandleProgramReg(item.id)} 
@@ -103,7 +106,8 @@ export default function EventInfo(props) {
             {item.registration_start != null && new Date(item.registration_start) > new Date() && <div className="info"> Registrácia od: {item.registration_start.substring(0,10)} </div>}
             {item.registered && <Button href={linkstart + `program/${item.id}`}> {fb} </Button>}
             {item.registered && localStorage["org"] == "true" && <Button href={`/registered/program/${item.id}`}> Prihlásení používatelia </Button>}
-            {item.registered && <div className='logOut'><Button color='inherit' onClick={() => HandleLogOut(item)}> Zrušiť registráciu </Button></div>}   
+            {(localStorage["org"] != null && localStorage["org"]=="true" && item.registered && <Button href={`/update_program/${item.id}`}>Upraviť program</Button>) ||
+            (item.registered && <div className='logOut'><Button color='inherit' onClick={() => HandleLogOut(item)}> Zrušiť registráciu </Button></div>)}   
         </div>))
     } 
 

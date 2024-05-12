@@ -233,15 +233,23 @@ def get_programs(req, id):
         username = check_login(token)["name"]
         user = User.objects.get(username=username)
         cUser = CustomUser.objects.get(user=user)
+        org = len(cUser.roles.all()) > 0
         regs = Event_registration.objects.filter(user=cUser, event=event[0])
         if len(regs) > 0:
             reg = True
-        for prog in programs:
-            progReg = Program_registration.objects.filter(user=cUser, program=prog)
-            if len(progReg) > 0:
-                pReg.append(True)
-            else:
-                pReg.append(False)
+        if org:
+            for prog in programs:
+                if cUser in prog.organizers.all():
+                    pReg.append(True)
+                else:
+                    pReg.append(False)
+        else:
+            for prog in programs:
+                progReg = Program_registration.objects.filter(user=cUser, program=prog)
+                if len(progReg) > 0:
+                    pReg.append(True)
+                else:
+                    pReg.append(False)
     except:
         pReg = [False for _ in programs]
     
