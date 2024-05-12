@@ -54,7 +54,7 @@ export default function RegisteredUsers() {
     
     if (type == "event" && action != null && action.accomodation_dates != null) {
       acc_dates.push(action.accomodation_dates.map((item) => 
-      <th><div>Ubytovanie od {item.start.substring(0,10)} do {item.end.substring(0,10)}</div></th>
+      <th><div><p>Ubytovanie od {item.start.substring(0,10)} </p> <p> do {item.end.substring(0,10)}</p></div></th>
     ))}
 
     const myList = []

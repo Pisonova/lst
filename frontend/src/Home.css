@@ -103,18 +103,18 @@ a {
     color: white;
 }
 
-table, th, td {
-    text-align: center;
-    border: 1px solid #157ee0;
+table {
+    border-spacing: 10px 20px;
     border-collapse: collapse;
+    margin: 3%;
+}
+
+th, td {
+    text-align: center;
     min-width: fit-content;
     padding-top: 1%;
     padding-bottom: 1%;
-}
-
-
-.list {
-    margin: 3%;
+    margin: 5%;
 }
 
 .success {
