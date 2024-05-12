@@ -320,7 +320,6 @@ def load_my_programs(req):
         try:
             if org:
                 for prog in programs:
-                    print(prog.organizers.all(), cUser)
                     if cUser in prog.organizers.all():
                         registrations.append(True)
                     else:
@@ -332,7 +331,6 @@ def load_my_programs(req):
                     else:
                         registrations.append(False)
         except Exception as error:
-            print(error)
             return JsonResponse({"message": "Nepodarilo sa načítať programy"}, status=401)
 
     if len(registrations) == 0:
@@ -589,8 +587,6 @@ def add_program(req):
             more_info=more_info,
             program_type=pt,
         )
-        print("ok")
-        
         for event in events:
             e = Event.objects.get(id=event["id"])
             new_program.events.add(e)
@@ -599,15 +595,10 @@ def add_program(req):
             new_program.organizers.add(o)
                 
     except Exception as error:
-        print(error)
         return JsonResponse({"message": "Nepodarilo sa vytvoriť program"}, status=401)
 
     new_program.save()
     programs = Program.objects.all()
-    print(programs[0].start)
-    print(datetime.strptime(start, '%Y-%m-%dT%H:%M'))
-    print(token, name, visible, start, end, reg_start, reg_end)
-    print(more_info, ptId, organizers, events)
     return JsonResponse({})
 
 @csrf_exempt
@@ -655,3 +646,77 @@ def get_events(req):
             "start": event.start
         })
     return JsonResponse(events, safe=False)
+
+@csrf_exempt
+def get_program(req, id):
+    try: 
+        token = req.GET["token"]
+        username = check_login(token)
+        user = User.objects.get(username=username["name"])
+        cUser = CustomUser.objects.get(user=user)
+        program = Program.objects.get(id=id)
+        if len(cUser.roles.all()) == 0 or cUser not in program.organizers.all():
+            return JsonResponse({"message": "Nemáte oprávnenia"}, status=401)
+        organizers = []
+        for org in program.organizers.all():
+            organizers.append({
+                "id": org.id,
+                "name": org.user.first_name + ' ' + org.user.last_name
+            })
+        events = []
+        for e in program.events.all():
+            events.append({
+                "id": e.id,
+                "name": e.name + ' ' + str(e.start)[:4]
+            })
+        prog_res = { 
+            "name": program.name,
+            "visible": program.visible,
+            "start": program.start,
+            "end": program.end,
+            "reg_start": program.registration_start,
+            "reg_end": program.registration_end,
+            "more_info": program.more_info,
+            "program_type": {
+                "id": program.program_type.id,
+                "name": program.program_type.name,
+            },
+            "organizers": organizers,
+            "events": events,
+        }
+        
+    except Exception as error:
+        return JsonResponse({"message": "Nepodarilo sa načítať"}, status=401)
+
+    return JsonResponse(prog_res)
+
+@csrf_exempt
+def update_program(req, id):
+    body = json.loads(req.body)
+    token, name, visible = body["token"], body["name"], body["visible"]
+    start, end, reg_start, reg_end = body["start"], body["end"], body["reg_start"], body["reg_end"]
+    more_info, ptId = body["more_info"], body["program_typeId"],
+    organizers, events = body["organizers"], body["events"]
+    try:
+        program = Program.objects.get(id=id)
+        pt = Program_type.objects.get(id=ptId)
+        program.name = name
+        program.visible = visible
+        program.start = datetime.strptime(start, '%Y-%m-%dT%H:%M')
+        program.end = datetime.strptime(end, '%Y-%m-%dT%H:%M')
+        program.more_info = more_info
+        program.program_type = pt
+        
+        program.events.clear()
+        for event in events:
+            e = Event.objects.get(id=event["id"])
+            program.events.add(e)
+        program.organizers.clear()
+        for org in organizers:
+            o = CustomUser.objects.get(id=org["id"])
+            program.organizers.add(o)
+        program.save()         
+    except Exception as error:
+        return JsonResponse({"message": "Nepodarilo sa upraviť program"}, status=401)
+
+    return JsonResponse({})

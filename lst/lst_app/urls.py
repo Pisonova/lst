@@ -6,6 +6,8 @@ urlpatterns = [
     path('registration/<int:id>', get_event),
     path('register', register),
     path('', load),
+    path('getProgram/<int:id>', get_program),
+    path('update_program/<int:id>', update_program),
     path('register_event', register_event),
     path('archive', load_old),
     path('myevents', load_my_events),

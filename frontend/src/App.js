@@ -12,12 +12,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ShowFeedbacks from './ShowFeedbacks';
 import RegisteredUsers from './RegisteredUsers';
 import ActionsLinks from './ActionsLinks';
-import NewProgram from './NewProgram'
+import NewProgram from './NewProgram';
+import UpdateProgram from './UpdateProgram';
 
 function App() {
     return (
       <BrowserRouter>
         <Routes>
+          <Route path="/update_program/:id" element={<UpdateProgram/>} />
           <Route path="/add_program/:id" element={<NewProgram />} />
           <Route path="/actions/:type" element={<ActionsLinks />} />
           <Route path="/my_programs" element={<MyPrograms/>} />
