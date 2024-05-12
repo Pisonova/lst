@@ -223,12 +223,17 @@ def get_action(req, type, id):
 
 @csrf_exempt
 def get_programs(req, id):
+    org = False
     try:
         token = req.GET["token"]
         username = check_login(token)["name"]
         user = User.objects.get(username=username)
         cUser = CustomUser.objects.get(user=user)
         org = len(cUser.roles.all()) > 0
+    except:
+        pass
+    
+    try:
         if org:
             event = Event.objects.filter(id=id)
         else:

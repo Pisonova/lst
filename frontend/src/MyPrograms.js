@@ -8,18 +8,15 @@ import LoginLogic from './LoginLogic.js';
  
 export default function MyPrograms () {
     const [programs, setPrograms] = useState([])
+    let org = localStorage["org"] != null && localStorage["org"]=="true"
     
     const getData =async ()=> {
         try {
             const {data} = await axios.get(`http://${hostname}:8000/api/myprograms`,  {params: {token: localStorage["token"], }});
             setPrograms(data)
         } catch (error) {
-            if (error?.response?.data.message) {
-                alert(error.response.data.message)
-            }
-            else {
-                alert(error)
-            }
+            if (error?.response?.data.message) { alert(error.response.data.message) }
+            else { alert(error) }
         }
     }
 
@@ -42,7 +39,7 @@ export default function MyPrograms () {
 
     let linkstart = '/feedback/'
     let fb = "Feedback"
-    if (localStorage["org"] == 'true') { 
+    if (org) { 
         linkstart='/feedbacks/'
         fb = "Feedbacky od účastníkov" 
     }
@@ -56,8 +53,8 @@ export default function MyPrograms () {
             <p>Začiatok: {item.start.substring(0,10)} </p>
             <p>Koniec: {item.end.substring(0, 10)}</p>
             <Button href={linkstart + `program/${item.id}`} > {fb} </Button>
-            {item.registered && <Button href={`registered/program/${item.id}`}> Prihlásení používatelia </Button>}
-            {(localStorage["org"] != null && localStorage["org"]=="true" && item.registered && <Button href={`/update_program/${item.id}`}>Upraviť program</Button>) ||
+            {org && item.registered && <Button href={`registered/program/${item.id}`}> Prihlásení používatelia </Button>}
+            {(org && item.registered && <Button href={`/update_program/${item.id}`}>Upraviť program</Button>) ||
             (item.registered && <div className='logOut'><Button color='inherit' onClick={() => HandleLogOut(item)}> Zrušiť registráciu </Button></div>)}   
         </div>)
 

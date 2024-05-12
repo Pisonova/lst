@@ -68,9 +68,9 @@ export default function EventRegistration (props) {
             <Menu />
             <LoginLogic />
         <div className="container">
+            <form>
             <FormGroup>
-                <h2>Registrácia na akciu:</h2>
-                <h2>{logEvent.name}</h2>
+                <h2>Registrácia na akciu: </h2><h2>{logEvent.name}</h2>
                 <div className="ui divider"></div>
                 <div className="field">
                     <TextField
@@ -91,6 +91,7 @@ export default function EventRegistration (props) {
                 </FormGroup>
                 <Button variant="contained" onClick={handleSubmit}>Submit</Button>
             </FormGroup>
+            </form>
         </div>
         </div>
     </>)

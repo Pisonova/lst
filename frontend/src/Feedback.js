@@ -61,6 +61,7 @@ export default function Feedback(props) {
     return (<>
         <div> <Menu /> <LoginLogic />
         <div className="container">
+            <form>
             <FormGroup>
                 <h2>Feedback na akciu:</h2>
                 <h2>{action.name}</h2>
@@ -94,6 +95,7 @@ export default function Feedback(props) {
                 <Button variant="contained" onClick={handleSubmit}>Submit</Button>
                 </div>
             </FormGroup>
+            </form>
         </div>
         </div>
     </>)

@@ -51,7 +51,7 @@ export default function Home () {
             {!loggedin && item.registration_end != null && (item.registration_start == null || new Date(item.registration_start) < new Date()) && <a href="/login" className='info'>Najskôr sa musíte prihlásiť</a>}
             {item.registered && <div className="success">Na túto akciu ste zaregistrovaný</div>}
             {item.registration_start != null && new Date(item.registration_start) > new Date() && <div className="info"> Registrácia od: {item.registration_start.substring(0,10)} </div>}
-            {item.registered && <div className='logOut'><Button color='inherit' onClick={() => HandleLogOut(item)}> Zrušiť registráciu </Button></div>}
+            {item.registered && <div className='logOut'><Button variant="contained" color='inherit' onClick={() => HandleLogOut(item)}> Zrušiť registráciu </Button></div>}
         </div>)
 
     if (myList.length === 0) {

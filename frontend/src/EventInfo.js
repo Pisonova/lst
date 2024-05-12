@@ -56,11 +56,8 @@ export default function EventInfo(props) {
             })
             setEvent(data[0])
         } catch (error) {
-            if (error?.response?.data?.message) {
-                alert(error.response.data.message)
-            } else {
-                alert(error);
-            }
+            if (error?.response?.data?.message) { alert(error.response.data.message) } 
+            else { alert("Nepodarilo sa načítať dáta"); }
         }
     }
 
@@ -69,10 +66,7 @@ export default function EventInfo(props) {
       }, []);
     
     const myList = []
-    let loggedin = false;
-    if (localStorage["token"] != null) {
-        loggedin = true;
-    }
+    let loggedin = localStorage["token"] != null;
 
     let linkstart = '/feedback/'
     let fb = "Feedback"
@@ -80,6 +74,8 @@ export default function EventInfo(props) {
         linkstart='/feedbacks/'
         fb = "Feedbacky od účastníkov" 
     }
+
+    let org = localStorage["org"] != null && localStorage["org"] == "true"
 
     console.log(localStorage["org"])
     if (event?.programs != null) {
@@ -102,11 +98,11 @@ export default function EventInfo(props) {
                 onClick={() => HandleProgramReg(item.id)} 
             >Zaregistrovať sa (do {item.registration_end.substring(0,10)})</Button>} </div>
             {!loggedin && item.registration_end != null && (item.registration_start == null || new Date(item.registration_start) < new Date()) && <a href="/login" className='info'>Najskôr sa musíte prihlásiť</a>}
-            {item.registered && <div className="success">Na tento program ste zaregistrovaný</div>}
+            {item.registered && !org && <div className="success">Na tento program ste zaregistrovaný</div>}
             {item.registration_start != null && new Date(item.registration_start) > new Date() && <div className="info"> Registrácia od: {item.registration_start.substring(0,10)} </div>}
             {item.registered && <Button href={linkstart + `program/${item.id}`}> {fb} </Button>}
             {item.registered && localStorage["org"] == "true" && <Button href={`/registered/program/${item.id}`}> Prihlásení používatelia </Button>}
-            {(localStorage["org"] != null && localStorage["org"]=="true" && item.registered && <Button href={`/update_program/${item.id}`}>Upraviť program</Button>) ||
+            {(org && item.registered && <Button href={`/update_program/${item.id}`}>Upraviť program</Button>) ||
             (item.registered && <div className='logOut'><Button color='inherit' onClick={() => HandleLogOut(item)}> Zrušiť registráciu </Button></div>)}   
         </div>))
     } 

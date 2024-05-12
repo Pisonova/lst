@@ -57,44 +57,44 @@ export default function Register () {
                 <div className="ui divider"></div>
                 <div className="ui form">
                     <div className="field">
-                        <TextField
+                        <TextField sx={{width: 265, color: 'white' }}
                             label='Meno'
                             onChange={(e) => setFName(e.target.value)}       
                         />
                     </div>
                     <div className="field">
-                        <TextField
+                        <TextField sx={{width: 265, color: 'white' }}
                             label='Priezvisko'
                             onChange={(e) => setSurname(e.target.value)}
                         />
                     </div>
                     <div className="field">
-                        <TextField
+                        <TextField sx={{width: 265, color: 'white' }}
                             label='Používateľské meno'
                             onChange={(e) => setUName(e.target.value)}
                         />
                     </div>
                     <div className="field">
-                        <TextField
+                        <TextField sx={{width: 265, color: 'white' }}
                             label='Email'
                             onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
                     <div className="field">
-                        <TextField
+                        <TextField sx={{width: 265, color: 'white' }}
                             label='Heslo'
                             type='password'
                             onChange={(e) => setPasswd(e.target.value)}
                         />
                     </div>
                     <div className="field">
-                        <TextField
+                        <TextField sx={{width: 265, color: 'white' }}
                             label='Potvrďte heslo'
                             type='password'
                             onChange={(e) => setCtrlPasswd(e.target.value)}
                         />
                     </div>
-                    <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+                    <Button variant="contained" sx={{width: 265, color: 'white' }} onClick={handleSubmit}>Submit</Button>
                 </div>
                 <div className='change'>
                 <a href="/login">Máte už vytvorený účet? Prihláste sa</a>

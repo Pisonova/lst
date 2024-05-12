@@ -46,14 +46,12 @@ export default function ActionsLinks() {
         <div>
             <Menu />
             <LoginLogic />
-            <div><h2>{type == "feedbacks" && "Feedbacky" || type == "registered" && "Prihlásení používatelia"}</h2></div>
-            <div><h4>Akcie</h4>
-            <ul>{events}</ul>
+
+            <div className="actionlist">
+                <div><h2>{type == "feedbacks" && "Feedbacky" || type == "registered" && "Prihlásení používatelia"}</h2></div>
+                <div><h4>Akcie</h4><ul>{events}</ul></div>
+                <div><h4>Programy</h4><ul>{programs}</ul></div>
             </div>
-            <div><h4>Programy</h4>
-            <ul>{programs}</ul>
-            </div>
-            
         </div>
     </>
     )

@@ -10,7 +10,7 @@ import { Check, X } from "@phosphor-icons/react"
  
 export default function RegisteredUsers() {
     const [users, setUsers] = useState([])
-    const [event, setEvent] = useState("")
+    const [action, setAction] = useState()
     const type = useParams()["type"]
     const id = useParams()["id"]
     
@@ -32,26 +32,29 @@ export default function RegisteredUsers() {
         getUsers()
     }, []);
 
-    const getEvent =async ()=> {
+    const getAction =async ()=> {
         if (type == "event") {
             try {
                 const {data} = await axios.get(`http://${hostname}:8000/api/registration/${id}`);
-                setEvent(data[0]);
-            } catch (error) {
-                alert(error);
-            }
+                setAction(data[0]);
+            } catch (error) { alert(error); }
+        } else {
+            try {
+                const {data} = await axios.get(`http://${hostname}:8000/api/${type}/${id}`);
+                setAction(data[0]);
+            } catch (error) { alert(error); }
         }
     }
 
     useEffect(() => {
-        getEvent()
+        getAction()
       }, []);
     
     const acc_dates = []
     
-    if (type == "event" && event.accomodation_dates != null) {
-      acc_dates.push(event.accomodation_dates.map((item) => 
-      <th><div>Od {item.start.substring(0,10)} do {item.end.substring(0,10)}</div></th>
+    if (type == "event" && action != null && action.accomodation_dates != null) {
+      acc_dates.push(action.accomodation_dates.map((item) => 
+      <th><div>Ubytovanie od {item.start.substring(0,10)} do {item.end.substring(0,10)}</div></th>
     ))}
 
     const myList = []
@@ -70,6 +73,7 @@ export default function RegisteredUsers() {
             <Menu />
             <LoginLogic />
             <div className="list">
+                <h2>Používatelia prihlásení na {type=="event" && "akciu" || "program"}: {action != null && action.name}</h2>
                 <table className="users">
                     <thead>
                         <tr>

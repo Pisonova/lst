@@ -11,6 +11,7 @@ export default function ShowFeedbacks () {
     const [feedbacks, setFeedbacks] = useState([])
     const type = useParams()["type"]
     const id = useParams()["id"]
+    const [action, setAction] = useState()
     
     const getFeedbacks =async ()=> {
         try {
@@ -23,6 +24,17 @@ export default function ShowFeedbacks () {
             else {
                 alert(error)
             }
+        }
+        try {
+            const {data} = await axios.get(`http://${hostname}:8000/api/${type}/${id}`,  {params: {token: localStorage["token"], }});
+            setAction(data[0]); console.log(data)
+        } catch (error) {
+            if (error?.response?.data.message) {
+                alert(error.response.data.message)
+            }
+            else {
+                alert(error)
+            }   
         }
     }
 
@@ -42,6 +54,7 @@ export default function ShowFeedbacks () {
             <Menu />
             <LoginLogic />
             <div class="list">
+                <h2>Feedbacky na {type=="event" && "akciu" || "program"}: {action != null && action.name}</h2>
                 <table class="feedbacks">
                     <thead>
                         <th scope="col"> <div>Meno</div> </th>

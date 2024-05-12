@@ -4,7 +4,7 @@ import "./Register.css"
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
-import { FormLabel, FormGroup, FormControlLabel } from '@mui/material'
+import { FormLabel, FormGroup, FormControlLabel, InputLabel } from '@mui/material'
 import { hostname } from './config';
 import Menu from './Menu'
 import { useParams } from 'react-router-dom'
@@ -33,7 +33,7 @@ export default function NewProgram () {
     const pts = []
     if (program_types.length > 0) {
     pts.push(program_types.map((item) => 
-        <Button variant="contained" value={item.name} id={item.id} onClick={(e) => handlePT(e)}>{item.name}</Button>
+        <Button className='pt' sx={{ width: '90%', maxWidth: 400, color: 'white' }} variant="contained" value={item.name} id={item.id} onClick={(e) => handlePT(e)}>{item.name}</Button>
     ))}
 
     const [allEvents, setAllE] = useState([])   
@@ -59,7 +59,7 @@ export default function NewProgram () {
     };
     
 
-    const handleClick = () => { setVisible(!visible) }
+    const handleClick = () => { setVisible(!visible); console.log(start)}
 
     const handleSubmit = (e) => {
         if (name.length == 0) {
@@ -122,7 +122,7 @@ export default function NewProgram () {
         <>
         <Menu />
         <LoginLogic />
-        <div className="container">
+        <div className="program">
             <form>
                 <h2>Nový program</h2>
                 <div className="ui divider"></div>
@@ -137,15 +137,19 @@ export default function NewProgram () {
                     <FormControlLabel control={<Checkbox onClick={(e) => {handleClick()}} default={visible}/>} label="Má byť tento program viditeľný?" />
                     </FormGroup>
                     <div className="field">
-                        <input aria-label="Začiatok" type="datetime-local" onChange={(e) => setStart(e.target.value)}/>
+                        <InputLabel>Začiatok</InputLabel>
+                        <input aria-label="Začiatok" name="Začiatok" type="datetime-local" onChange={(e) => setStart(e.target.value)}/>
                     </div>
                     <div className="field">
+                        <InputLabel>Koniec</InputLabel>
                         <input aria-label="Koniec" type="datetime-local" onChange={(e) => setEnd(e.target.value)}/>
                     </div>
                     <div className="field">
+                        <InputLabel>Registrácia od:</InputLabel>
                         <input aria-label="Registrácia od" type="datetime-local" onChange={(e) => setRegStart(e.target.value)}/>
                     </div>
                     <div className="field">
+                        <InputLabel>Registrácia do:</InputLabel>
                         <input aria-label="Registrácia od" type="datetime-local" onChange={(e) => setRegEnd(e.target.value)}/>
                     </div>
                     <div className="field">
@@ -155,7 +159,8 @@ export default function NewProgram () {
                         />
                     </div>
                     <div className="programTypes">
-                        <Button variant="contained" onClick={handleOpen}>Typ programu: {selectedPT.name}</Button>
+                        <InputLabel>Typ programu: </InputLabel>
+                        <Button sx={{ width: '90%', maxWidth: 400, color: 'white' }} variant="contained" onClick={handleOpen}>{selectedPT.name}</Button>
                         {open && <div className="dropdownPT">
                             {pts}
                         </div>}

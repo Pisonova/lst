@@ -1,30 +1,22 @@
 * {
     box-sizing: border-box;
 }
-body {
-    background-repeat: no-repeat;
-    background-position: top-left;
-    background-size: 10%;
-    background-position-x: 10%;
-    background-position-y: 10%;
-}
 
 .container {
-
     display: flex !important;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    max-width: 50%;
-    margin: auto; 
+    height: fit-content;
+    width: 300;
 }
 
 .container > form {
-    border: 1px solid #dfdfdf;
-    padding: 20%;
+    border: 1px solid #157ee0;
+    padding: 15%;
     border-radius: 5%;
     background: #fff;
+    margin: 5%;
 }
 
 input {
@@ -77,4 +69,43 @@ span {
 
 .programTypes {
     margin: 5%;
+}
+
+.menu {
+    float: left;
+}
+
+.program {
+    float: left;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+    width: 70%;
+    margin-top: 2%; 
+    margin-bottom: 2%;
+}
+
+.program > form {
+    border: 1px solid #157ee0;
+    padding: 15%;
+    border-radius: 3%;
+    background: #fff;
+    margin-left: 5%;
+}
+
+.events {
+    margin: 2%;
+}
+
+.orgs {
+    margin: 2%;
+}
+
+.dropdownPT {
+    margin: 0;
+    padding: 0;
+    width: fit-content;
+    max-width: 400;
 }

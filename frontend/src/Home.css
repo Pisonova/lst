@@ -4,19 +4,28 @@
 
 h2 {
     color: rgb(21, 124, 221);
+    margin: 3%;
 }
+
+h4 {
+    margin: 2%;
+}
+
 .event {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    float: middle;
     align-items: center;
     border-radius: 3%;
     border: 1px solid #157ee0;
     position: relative;
-    margin-left: 25%;
-    margin-right: 25%;
-    margin-bottom: 5%;
-    padding: 3%;
+    padding: 2%;
+    margin-top: 3%;
+    margin-left: 20%;
+    margin-right: 5%;
+    margin-bottom: 3%;
+    width: 400px;
+    max-width: 500px;
 }
 
 .container > form {
@@ -58,14 +67,16 @@ p {
 
 .btn {
     float: right;
-    margin: auto;
     margin-right: 3%;
+    margin-top: 2%;
 }
 
 .log {
     float: right;
     color: #157ee0;
     width: auto;
+    margin-top: 2%;
+    margin-left: 3%;
 }
 
 .log > p {
@@ -90,4 +101,29 @@ a {
 
 .logOut {
     color: white;
+}
+
+table, th, td {
+    text-align: center;
+    border: 1px solid #157ee0;
+    border-collapse: collapse;
+    min-width: fit-content;
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+
+
+.list {
+    margin: 3%;
+}
+
+.success {
+    margin: 2%;
+}
+
+.actionlist {
+    float: left;
+    margin-top: 10%;
+    margin-left: 2%;
+    width: 300px;
 }

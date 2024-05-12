@@ -50,7 +50,7 @@ export default function Login () {
                         onChange={(e) => setPasswd(e.target.value)}
                     />
                 </div>
-                <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+                <Button variant="contained" sx={{width: 244, color: 'white' }} onClick={handleSubmit}>Submit</Button>
                 <div className='change'>
                 <a href="/registration">Nemáte ešte vytvorený účet? Registrujte sa</a>
                 </div>
