@@ -223,17 +223,27 @@ def get_action(req, type, id):
 
 @csrf_exempt
 def get_programs(req, id):
-    event = Event.objects.filter(id=id)
-    values = list(event.values())
-    programs = Program.objects.filter(events__id=id)
-    pReg = []
-    reg = False
     try:
         token = req.GET["token"]
         username = check_login(token)["name"]
         user = User.objects.get(username=username)
         cUser = CustomUser.objects.get(user=user)
         org = len(cUser.roles.all()) > 0
+        if org:
+            event = Event.objects.filter(id=id)
+        else:
+            event = Event.objects.filter(id=id, visible=True)
+        values = list(event.values())
+        if org:
+            programs = Program.objects.filter(events__id=id)
+        else:
+            programs = Program.objects.filter(events__id=id, visible=True)
+        pReg = []
+        reg = False
+    except:
+        return JsonResponse({"message": "Nepodarilo sa načítať údaje"}, status=401)
+    
+    try:
         regs = Event_registration.objects.filter(user=cUser, event=event[0])
         if len(regs) > 0:
             reg = True
