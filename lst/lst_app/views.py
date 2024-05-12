@@ -370,6 +370,18 @@ def logout(req, aType, id):
                     toRemove = role
             if cuRoles is not None:
                 cUser.roles.remove(toRemove)
+        if aType == "event" and len(cUser.roles.all()) == 0:
+            pr = Program_registration.objects.filter(user=cUser)
+            for reg in pr:
+                if reg.program:
+                    rights = False
+                    events = reg.program.events.all()
+                    for event in events:
+                        if len(Event_registration.objects.filter(user=cUser, event=event)) > 0:
+                            rights = True
+                    if not rights:
+                        reg.delete()
+
     except:
         return JsonResponse({"message": "Nepodarilo sa zrušiť registráciu"}, status=401)
     return JsonResponse({})
