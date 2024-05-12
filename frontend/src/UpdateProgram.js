@@ -44,7 +44,7 @@ export default function UpdateProgram () {
     allEvents.forEach((item) => eOptions.push({id: item.id, name: item.name + " " + item.start.substring(0,4)}));
     const onSelectE = (selectedList, selectedItem) => { setE([...selectedE, selectedItem]); };
     const onRemoveE = (selectedList, removedItem) => {
-        setE(selectedE.filter(item => item != removedItem))
+        setE(selectedE.filter(item => item.id != removedItem.id))
     };
 
     const [allOrganizers, setAllO] = useState([])   
@@ -55,7 +55,7 @@ export default function UpdateProgram () {
     allOrganizers.forEach((item) => oOptions.push({id: item.id, name: item.first_name + " " + item.last_name}));
     const onSelectO = (selectedList, selectedItem) => { setOrgs([...selectedOrgs, selectedItem]); };
     const onRemoveO = (selectedList, removedItem) => {
-        setOrgs(selectedOrgs.filter(item => item != removedItem))
+        setOrgs(selectedOrgs.filter(item => item.id != removedItem.id))
     };
     
 
