@@ -283,22 +283,40 @@ def register_program(req):
 @csrf_exempt
 def load_my_programs(req):
     username = None
+    org = False
     try:
         token = req.GET["token"]
         username = check_login(token)
+        user = User.objects.get(username=username["name"])
+        cUser = CustomUser.objects.get(user=user)
+        org = len(cUser.roles.all())>0
     except:
         return JsonResponse({"message": "Nie ste prihlásený"}, status=401)
-    programs = Program.objects.filter(visible=True)
+    if org:
+        programs = Program.objects.all()
+    else:
+        programs = Program.objects.filter(visible=True)
     registrations = []
 
     if username:
-        user = User.objects.get(username=username["name"])
-        cUser = CustomUser.objects.get(user=user)
-        for prog in programs:
-            if Program_registration.objects.filter(user=cUser, program=prog):
-                registrations.append(True)
+        try:
+            if org:
+                for prog in programs:
+                    print(prog.organizers.all(), cUser)
+                    if cUser in prog.organizers.all():
+                        registrations.append(True)
+                    else:
+                        registrations.append(False)
             else:
-                registrations.append(False)
+                for prog in programs:
+                    if Program_registration.objects.filter(user=cUser, program=prog):
+                        registrations.append(True)
+                    else:
+                        registrations.append(False)
+        except Exception as error:
+            print(error)
+            return JsonResponse({"message": "Nepodarilo sa načítať programy"}, status=401)
+
     if len(registrations) == 0:
         registrations = [False for prog in programs]
     res = list(programs.values())
@@ -422,6 +440,7 @@ def get_registered(req, aType, id):
     else:
         program = Program.objects.get(id=id)
         regs = Program_registration.objects.filter(program=program)
+
 @csrf_exempt
 def get_registered(req, aType, id):
     username = None

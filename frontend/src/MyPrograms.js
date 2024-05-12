@@ -57,7 +57,8 @@ export default function MyPrograms () {
             <p>Koniec: {item.end.substring(0, 10)}</p>
             <Button href={linkstart + `program/${item.id}`} > {fb} </Button>
             {item.registered && <Button href={`registered/program/${item.id}`}> Prihlásení používatelia </Button>}
-            {item.registered && <div className='logOut'><Button color='inherit' onClick={() => HandleLogOut(item)}> Zrušiť registráciu </Button></div>}   
+            {(localStorage["org"] != null && localStorage["org"]=="true" && item.registered && <Button href={`/update_program/${item.id}`}>Upraviť program</Button>) ||
+            (item.registered && <div className='logOut'><Button color='inherit' onClick={() => HandleLogOut(item)}> Zrušiť registráciu </Button></div>)}   
         </div>)
 
     return (<>
