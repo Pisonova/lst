@@ -68,7 +68,7 @@ export default function NewProgram () {
             if (start.length === 0 && end.length === 0) {
                 alert("Začiatok a koniec programu sú povinné")
             } else {
-                axios.post(`http://${hostname}:8000/api/add_program`, {
+                axios.post(`/api/add_program`, {
                     token: localStorage["token"], name: name, visible: visible,
                     start: start, end: end, reg_start: reg_start, reg_end: reg_end,
                     more_info: more_info, program_typeId: selectedPT["id"],
@@ -85,7 +85,7 @@ export default function NewProgram () {
 
     const getData =async ()=> {
         try {
-            const {data} = await axios.get(`http://${hostname}:8000/api/getProgramTypes`)
+            const {data} = await axios.get(`/api/getProgramTypes`)
             setProgramTypes(data); setPT(data[0])
             console.log(selectedPT)
         } catch (error) {
@@ -93,7 +93,7 @@ export default function NewProgram () {
             else { alert("Nepodarilo sa načítať typy programu"); }
         }
         try {
-            const {data} = await axios.get(`http://${hostname}:8000/api/getOrganizers`, 
+            const {data} = await axios.get(`/api/getOrganizers`, 
                 {params: { token: localStorage["token"] }})
             setAllO(data);
             setPSO([{id: data[0].id, name: data[0].first_name + " " + data[0].last_name}]);
@@ -103,7 +103,7 @@ export default function NewProgram () {
             else { alert("Nepodarilo sa načítať organizátorov"); }
         }
         try {
-            const {data} = await axios.get(`http://${hostname}:8000/api/getEvents`, 
+            const {data} = await axios.get(`/api/getEvents`, 
                 {params: { token: localStorage["token"], eventId: id }})
             setAllE(data); 
             if (id != -1) {setPSE([{id: data[0].id, name: data[0].name + " " + data[0].start.substring(0,4)}]);

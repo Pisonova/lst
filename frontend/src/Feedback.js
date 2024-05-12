@@ -4,7 +4,7 @@ import "./Home.css"
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox';
-import { FormLabel, RadioGroup, FormGroup, FormControlLabel } from '@mui/material'
+import { FormLabel, FormGroup } from '@mui/material'
 import { hostname } from './config';
 import { useParams } from 'react-router-dom'
 import Menu from './Menu'
@@ -24,7 +24,7 @@ export default function Feedback(props) {
     const handleSubmit = () => {
         let token = ""
         if (!anonymous) { token = localStorage["token"] }
-        axios.post(`http://${hostname}:8000/api/add_feedback`, {
+        axios.post(`/api/add_feedback`, {
             token: token,
             type: type,
             id: id,
@@ -45,7 +45,7 @@ export default function Feedback(props) {
 
     const getEvent =async ()=> {
         try {
-            const {data} = await axios.get(`http://${hostname}:8000/api/${type}/${id}`);
+            const {data} = await axios.get(`/api/${type}/${id}`);
             setAction(data[0]);
         } catch (error) {
             if (error?.response?.data?.message){

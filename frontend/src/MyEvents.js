@@ -11,7 +11,7 @@ export default function MyEvents () {
     
     const getData =async ()=> {
         try {
-            const {data} = await axios.get(`http://${hostname}:8000/api/myevents`,  {params: {token: localStorage["token"], }});
+            const {data} = await axios.get(`/api/myevents`,  {params: {token: localStorage["token"], }});
             setEvents(data)
         } catch (error) {
             if (error?.response?.data.message) {
@@ -29,7 +29,7 @@ export default function MyEvents () {
 
     let linkstart = '/feedback/event/'
     let fb = "Feedback"
-    if (localStorage["org"] == 'true') { 
+    if (localStorage["org"] === 'true') { 
         linkstart='feedbacks/event/'
         fb = "Feedbacky od účastníkov" 
     }

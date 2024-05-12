@@ -1,12 +1,10 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import "./Home.css"
-import Button from '@mui/material/Button'
 import { hostname } from './config.js';
 import Menu from "./Menu.js"
 import LoginLogic from './LoginLogic.js';
 import { useParams } from 'react-router-dom'
-import { Check, X } from "@phosphor-icons/react"
  
 export default function ActionsLinks() {
     const [actions, setActions] = useState([])
@@ -14,7 +12,7 @@ export default function ActionsLinks() {
     
     const getActions =async ()=> {
         try {
-            const {data} = await axios.get(`http://${hostname}:8000/api/getactions`,  {params: {token: localStorage["token"], }});
+            const {data} = await axios.get(`/api/getactions`,  {params: {token: localStorage["token"], }});
             setActions(data)
         } catch (error) {
             if (error?.response?.data.message) {
@@ -48,7 +46,7 @@ export default function ActionsLinks() {
             <LoginLogic />
 
             <div className="actionlist">
-                <div><h2>{type == "feedbacks" && "Feedbacky" || type == "registered" && "Prihlásení používatelia"}</h2></div>
+                <div><h2>{(type === "feedbacks" && "Feedbacky") || (type === "registered" && "Prihlásení používatelia")}</h2></div>
                 <div><h4>Akcie</h4><ul>{events}</ul></div>
                 <div><h4>Programy</h4><ul>{programs}</ul></div>
             </div>

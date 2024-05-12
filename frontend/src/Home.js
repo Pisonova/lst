@@ -11,7 +11,7 @@ export default function Home () {
 
     const getData =async ()=> {
         try {
-            const {data} = await axios.get(`http://${hostname}:8000/api/`,  {params: {token: localStorage["token"], }});
+            const {data} = await axios.get(`/api/`,  {params: {token: localStorage["token"], }});
             setEvents(data)
         } catch (error) {
             console.log(error);
@@ -19,7 +19,7 @@ export default function Home () {
     }
 
     const HandleLogOut = (event) =>{
-        axios.post(`http://${hostname}:8000/api/logout/event/${event.id}`, {
+        axios.post(`/api/logout/event/${event.id}`, {
             token: localStorage["token"],
         }).then(function ({data}) {
             window.location.reload()

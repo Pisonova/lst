@@ -3,9 +3,8 @@ import { useEffect, useState } from 'react'
 import "./Home.css"
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button'
-import Radio from '@mui/material/Radio'
 import Checkbox from '@mui/material/Checkbox'
-import { FormLabel, RadioGroup, FormGroup, FormControlLabel } from '@mui/material'
+import { FormLabel, FormGroup, FormControlLabel } from '@mui/material'
 import { hostname } from './config';
 import { useParams } from 'react-router-dom'
 import Menu from './Menu.js';
@@ -19,7 +18,7 @@ export default function EventRegistration (props) {
     const accs = []
     
     const handleSubmit = () => {
-        axios.post(`http://${hostname}:8000/api/register_event`, {
+        axios.post(`/api/register_event`, {
             token: localStorage["token"],
             event_id: eventId,
             lunches: lunches,
@@ -35,7 +34,7 @@ export default function EventRegistration (props) {
 
     const handleClick = (start, end) => {
         for (let i = 0; i < accs[0].length; i++) {
-            if (start == accs[0][i][0] && end == accs[0][i][1]) {
+            if (start === accs[0][i][0] && end === accs[0][i][1]) {
                 accomodations[0][i] = !accomodations[0][i];
             }
         }
@@ -43,7 +42,7 @@ export default function EventRegistration (props) {
 
     const getEvent =async ()=> {
         try {
-            const {data} = await axios.get(`http://${hostname}:8000/api/registration/${eventId}`);
+            const {data} = await axios.get(`/api/registration/${eventId}`);
             setEvent(data[0]);
         } catch (error) {
             alert(error);

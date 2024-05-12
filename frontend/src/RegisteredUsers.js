@@ -16,7 +16,7 @@ export default function RegisteredUsers() {
     
     const getUsers =async ()=> {
         try {
-            const {data} = await axios.get(`http://${hostname}:8000/api/registered/${type}/${id}`,  {params: {token: localStorage["token"], }});
+            const {data} = await axios.get(`/api/registered/${type}/${id}`,  {params: {token: localStorage["token"], }});
             setUsers(data)
         } catch (error) {
             if (error?.response?.data.message) {
@@ -35,12 +35,12 @@ export default function RegisteredUsers() {
     const getAction =async ()=> {
         if (type == "event") {
             try {
-                const {data} = await axios.get(`http://${hostname}:8000/api/registration/${id}`);
+                const {data} = await axios.get(`/api/registration/${id}`);
                 setAction(data[0]);
             } catch (error) { alert(error); }
         } else {
             try {
-                const {data} = await axios.get(`http://${hostname}:8000/api/${type}/${id}`);
+                const {data} = await axios.get(`/api/${type}/${id}`);
                 setAction(data[0]);
             } catch (error) { alert(error); }
         }

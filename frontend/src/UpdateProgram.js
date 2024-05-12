@@ -4,7 +4,7 @@ import "./Register.css"
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
-import { FormLabel, InputLabel, FormGroup, FormControlLabel } from '@mui/material'
+import { InputLabel, FormGroup, FormControlLabel } from '@mui/material'
 import { hostname } from './config';
 import Menu from './Menu'
 import { useParams } from 'react-router-dom'
@@ -71,7 +71,7 @@ export default function UpdateProgram () {
                 if (start.length === 0 && end.length === 0) {
                     alert("Začiatok a koniec programu sú povinné")
                 } else {
-                    axios.post(`http://${hostname}:8000/api/update_program/${pId}`, {
+                    axios.post(`/api/update_program/${pId}`, {
                         token: localStorage["token"], name: name, visible: visible,
                         start: start, end: end, reg_start: reg_start, reg_end: reg_end,
                         more_info: more_info, program_typeId: selectedPT["id"],
@@ -89,14 +89,14 @@ export default function UpdateProgram () {
 
     const getData =async ()=> {
         try {
-            const {data} = await axios.get(`http://${hostname}:8000/api/getProgramTypes`)
+            const {data} = await axios.get(`/api/getProgramTypes`)
             setProgramTypes(data); setPT(data[0])
         } catch (error) {
             if (error?.response?.data?.message) { alert(error.response.data.message) } 
             else { alert("Nepodarilo sa načítať typy programu"); }
         }
         try {
-            const {data} = await axios.get(`http://${hostname}:8000/api/getOrganizers`, 
+            const {data} = await axios.get(`/api/getOrganizers`, 
                 {params: { token: localStorage["token"] }})
             setAllO(data);
             setPSO([{id: data[0].id, name: data[0].first_name + " " + data[0].last_name}]);
@@ -105,7 +105,7 @@ export default function UpdateProgram () {
             else { alert("Nepodarilo sa načítať organizátorov"); }
         }
         try {
-            const {data} = await axios.get(`http://${hostname}:8000/api/getEvents`, 
+            const {data} = await axios.get(`/api/getEvents`, 
                 {params: { token: localStorage["token"], eventId: -1 }})
             setAllE(data); 
         } catch (error) {
@@ -113,7 +113,7 @@ export default function UpdateProgram () {
             else { alert("Nepodarilo sa načítať akcie"); }
         }
         try {
-            const {data} = await axios.get(`http://${hostname}:8000/api/getProgram/${pId}`, 
+            const {data} = await axios.get(`/api/getProgram/${pId}`, 
             {params: { token: localStorage["token"]}})
             setName(data.name); setVisible(data.visible); setStart(data.start.substring(0, 16)); setEnd(data.end.substring(0, 16));
             if (data.reg_start) { setRegStart(data.reg_start.substring(0, 16)); } 

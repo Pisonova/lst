@@ -15,7 +15,7 @@ export default function ShowFeedbacks () {
     
     const getFeedbacks =async ()=> {
         try {
-            const {data} = await axios.get(`http://${hostname}:8000/api/feedbacks/${type}/${id}`,  {params: {token: localStorage["token"], }});
+            const {data} = await axios.get(`/api/feedbacks/${type}/${id}`,  {params: {token: localStorage["token"], }});
             setFeedbacks(data)
         } catch (error) {
             if (error?.response?.data.message) {
@@ -26,7 +26,7 @@ export default function ShowFeedbacks () {
             }
         }
         try {
-            const {data} = await axios.get(`http://${hostname}:8000/api/${type}/${id}`,  {params: {token: localStorage["token"], }});
+            const {data} = await axios.get(`/api/${type}/${id}`,  {params: {token: localStorage["token"], }});
             setAction(data[0]); console.log(data)
         } catch (error) {
             if (error?.response?.data.message) {

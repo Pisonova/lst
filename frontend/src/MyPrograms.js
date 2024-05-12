@@ -12,7 +12,7 @@ export default function MyPrograms () {
     
     const getData =async ()=> {
         try {
-            const {data} = await axios.get(`http://${hostname}:8000/api/myprograms`,  {params: {token: localStorage["token"], }});
+            const {data} = await axios.get(`/api/myprograms`,  {params: {token: localStorage["token"], }});
             setPrograms(data)
         } catch (error) {
             if (error?.response?.data.message) { alert(error.response.data.message) }
@@ -26,7 +26,7 @@ export default function MyPrograms () {
   
     
     const HandleLogOut = (program) =>{
-        axios.post(`http://${hostname}:8000/api/logout/program/${program.id}`, {
+        axios.post(`/api/logout/program/${program.id}`, {
             token: localStorage["token"],
         }).then(function ({data}) {
             window.location.reload()

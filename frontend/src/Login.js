@@ -1,7 +1,7 @@
 
 import { useState } from 'react'
 import "./Register.css"
-import {TextField, CardMedia, Button} from '@mui/material';
+import {TextField, Button} from '@mui/material';
 import axios from 'axios'
 import {hostname} from './config';
 import Menu from './Menu'
@@ -11,7 +11,7 @@ export default function Login () {
     const [passwd, setPasswd] = useState('')
 
     const handleSubmit = () => {
-        axios.post(`http://${hostname}:8000/api/login`, {
+        axios.post(`/api/login`, {
             username: name,
             password: passwd
         }).then(function ({data}) {

@@ -1,6 +1,5 @@
 
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 
 import { useState } from 'react'
 import "./Register.css"
@@ -14,6 +13,7 @@ import ListItemText from '@mui/material/ListItemText';
 export default function Menu () {
     const [expand, setExpand] = useState(false)
 
+    let org = localStorage["org"] != null && localStorage["org"] === "true"
     return (      
         <>
         <List className="menu"
@@ -48,20 +48,17 @@ export default function Menu () {
               <ListItemText primary="Moje programy" />
             </ListItemButton>
             }
-            { expand && 
-            (localStorage["org"] != null && localStorage["org"] == "true") &&
+            { expand && org &&
               <ListItemButton href="/actions/registered"> 
               <ListItemText primary="Prihlásení používatelia" /> 
               </ListItemButton>
             }
-            { expand && 
-            (localStorage["org"] != null && localStorage["org"] == "true") &&
+            { expand && org &&
               <ListItemButton href="/actions/feedbacks"> 
               <ListItemText primary="Feedbacky" /> 
               </ListItemButton>
             }
-            { expand && 
-            (localStorage["org"] != null && localStorage["org"] == "true") &&
+            { expand && org &&
               <ListItemButton href="/add_program/-1"> 
               <ListItemText primary="Vytvoriť nový program" /> 
               </ListItemButton>
